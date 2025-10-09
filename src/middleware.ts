@@ -17,31 +17,13 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Handle public routes
-    if (PUBLIC_ROUTES.includes(pathname)) {
-      // Check if user is already authenticated
-      const { data: session } = await betterFetch<Session>(
-        '/api/auth/get-session',
-        {
-          baseURL: request.nextUrl.origin,
-          headers: {
-            cookie: request.headers.get('cookie') ?? '',
-          },
-        }
-      );
-
-      // Redirect authenticated users away from signin
-      if (session && pathname === '/signin') {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
-      }
-
-      return NextResponse.next();
-    }
-
     // Allow public route prefixes
     if (PUBLIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
       return NextResponse.next();
     }
+
+    // Check if route is public
+    const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
 
     // Validate session for protected routes
     const { data: session, error } = await betterFetch<Session>(
@@ -54,8 +36,19 @@ export async function middleware(request: NextRequest) {
       }
     );
 
-    // Redirect to signin if no session
-    if (!session || error) {
+    const isAuthenticated = session?.session?.activeOrganizationId;
+
+    // Handle public routes
+    if (isPublicRoute) {
+      // Redirect authenticated users away from auth pages
+      if (isAuthenticated && pathname === '/signin') {
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+      }
+      return NextResponse.next();
+    }
+
+    // Handle protected routes
+    if (!isAuthenticated || error) {
       const signInUrl = new URL('/signin', request.url);
       signInUrl.searchParams.set('next', pathname + request.nextUrl.search);
       return NextResponse.redirect(signInUrl);
