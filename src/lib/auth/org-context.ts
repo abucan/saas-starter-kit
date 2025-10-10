@@ -4,27 +4,7 @@ import { bAuth } from './auth';
 import type { Organization } from './auth';
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
-
-type FullOrganization = Organization & {
-  members: Array<{
-    id: string;
-    userId: string;
-    role: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-      image: string | null;
-    };
-  }>;
-  invitations: Array<{
-    id: string;
-    email: string;
-    role: string;
-    status: string;
-    expiresAt: Date;
-  }>;
-};
+import type { FullOrganization } from '@/types/auth'; // TODO: check if this is the correct type
 
 export async function setActiveOrganization(params: {
   organizationId?: string;

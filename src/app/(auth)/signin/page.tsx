@@ -13,13 +13,7 @@ import {
 import type { AuthStep } from '@/features/auth/types';
 import { SignInForm } from './_components/sign-in-form';
 import { OTPForm } from './_components/otp-form';
-
-const signInSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  otp: z.string().length(6, 'OTP must be 6 digits'),
-});
-
-type SignInFormData = z.infer<typeof signInSchema>;
+import { SignInInput, signInSchema } from '@/features/auth/schemas/auth.schema';
 
 export default function SignInPage() {
   const [currentStep, setCurrentStep] = useState<AuthStep>('email');
@@ -27,7 +21,7 @@ export default function SignInPage() {
   const [email, setEmail] = useState('');
   const searchParams = useSearchParams();
 
-  const form = useForm<SignInFormData>({
+  const form = useForm<SignInInput>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: '',
@@ -36,16 +30,13 @@ export default function SignInPage() {
     mode: 'onBlur',
   });
 
-  // Get redirect URL
   const next = searchParams.get('next') || '/dashboard';
   const redirectUrl =
     next.startsWith('/') && !next.startsWith('//') ? next : '/dashboard';
 
-  // Email submission handler
   const handleEmailSubmit = async () => {
     const email = form.getValues('email');
 
-    // Validate email only
     const emailValidation = z.string().email().safeParse(email);
     if (!emailValidation.success) {
       form.setError('email', { message: 'Please enter a valid email address' });
@@ -60,7 +51,6 @@ export default function SignInPage() {
       setEmail(email);
       setCurrentStep('otp');
     } else {
-      // Map error codes to user-friendly messages
       const errorMessages: Record<string, string> = {
         INVALID_EMAIL: 'Please enter a valid email address',
         RATE_LIMITED: 'Too many attempts. Please try again later.',
@@ -72,11 +62,9 @@ export default function SignInPage() {
     }
   };
 
-  // OTP submission handler
   const handleOtpSubmit = async () => {
     const otp = form.getValues('otp');
 
-    // Validate OTP only
     const otpValidation = z.string().length(6).safeParse(otp);
     if (!otpValidation.success) {
       form.setError('otp', { message: 'Please enter a valid 6-digit code' });
@@ -88,7 +76,6 @@ export default function SignInPage() {
     setLoading(false);
 
     if (!result.ok) {
-      // Map error codes to user-friendly messages
       const errorMessages: Record<string, string> = {
         INVALID_OTP: 'Invalid code. Please try again.',
         OTP_EXPIRED: 'Code expired. Request a new one.',
@@ -98,10 +85,8 @@ export default function SignInPage() {
         message: errorMessages[result.code] || result.message,
       });
     }
-    // On success, redirect happens automatically in the action
   };
 
-  // Back to email step
   const handleBack = () => {
     setCurrentStep('email');
     form.setValue('otp', '');

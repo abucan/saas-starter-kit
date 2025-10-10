@@ -1,12 +1,11 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/libsql';
 
-import * as authSchema from '@/lib/db/schemas/auth.schema';
-import * as billingSchema from '@/lib/db/schemas/billing.schema';
+import * as schemas from '@/lib/db/schemas';
 
-const fullSchema = { ...authSchema, ...billingSchema };
-
-export const db = drizzle(process.env.DB_FILE_NAME!, { schema: fullSchema });
+export const db = drizzle(process.env.DATABASE_URL!, {
+  schema: schemas,
+});
 
 export type {
   User,

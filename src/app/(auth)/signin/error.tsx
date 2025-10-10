@@ -26,10 +26,10 @@ export default function SignInError({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className='container max-w-sm'>
+    <div className='container w-full max-w-sm'>
       <Card role='alert'>
         <CardHeader className='text-center'>
-          <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10'>
+          <div className='mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10'>
             <AlertCircle className='h-6 w-6 text-destructive' />
           </div>
           <CardTitle>Something went wrong</CardTitle>

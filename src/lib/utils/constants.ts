@@ -30,7 +30,7 @@ export const MAX_SLUG_LENGTH = 50;
 // Session & Auth
 export const SESSION_COOKIE_NAME = 'better-auth.session_token';
 export const OTP_LENGTH = 6;
-export const OTP_EXPIRY_MINUTES = 10;
+export const OTP_EXPIRY_SECONDS = 60 * 10;
 export const INVITATION_EXPIRY_DAYS = 7;
 
 // Team Roles

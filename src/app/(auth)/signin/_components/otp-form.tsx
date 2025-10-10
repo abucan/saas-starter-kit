@@ -6,11 +6,9 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useOtpCountdown } from '@/features/auth/hooks/use-otp-countdown';
 import { resendOtpAction } from '@/features/auth/actions';
 import {
@@ -35,15 +33,12 @@ export function OTPForm({
   onBack,
 }: OTPFormProps) {
   const [resending, setResending] = useState(false);
-  const { timeRemaining, canResend, formattedTime, startCountdown } =
-    useOtpCountdown(60);
+  const { canResend, formattedTime, startCountdown } = useOtpCountdown(60);
 
-  // Start countdown on mount
   useEffect(() => {
     startCountdown();
   }, [startCountdown]);
 
-  // Resend handler
   const handleResend = async () => {
     setResending(true);
     const result = await resendOtpAction({ email });
@@ -56,7 +51,6 @@ export function OTPForm({
 
   return (
     <div className='container max-w-sm space-y-8'>
-      {/* Header */}
       <div className='text-center space-y-2'>
         <h1 className='text-2xl font-bold tracking-tight'>Verify your email</h1>
         <p className='text-sm text-muted-foreground'>
@@ -65,7 +59,6 @@ export function OTPForm({
         </p>
       </div>
 
-      {/* OTP Form */}
       <div className='space-y-4'>
         <FormField
           control={control}
@@ -103,29 +96,27 @@ export function OTPForm({
         >
           {loading ? 'Verifying...' : 'Verify'}
         </Button>
+
+        <div className='text-center flex flex-row justify-center items-center'>
+          <p className='text-sm text-muted-foreground -mr-2.5'>
+            Didn&apos;t receive a code?
+          </p>
+          <Button
+            type='button'
+            variant='link'
+            onClick={handleResend}
+            disabled={!canResend || resending}
+            className='text-sm'
+          >
+            {resending
+              ? 'Sending...'
+              : canResend
+              ? 'Resend code'
+              : `Resend code (${formattedTime})`}
+          </Button>
+        </div>
       </div>
 
-      {/* Resend */}
-      <div className='text-center flex flex-row justify-center items-center'>
-        <p className='text-sm text-muted-foreground -mr-2'>
-          Didn&apos;t receive a code?
-        </p>
-        <Button
-          type='button'
-          variant='link'
-          onClick={handleResend}
-          disabled={!canResend || resending}
-          className='text-sm'
-        >
-          {resending
-            ? 'Sending...'
-            : canResend
-            ? 'Resend code'
-            : `Resend code (${formattedTime})`}
-        </Button>
-      </div>
-
-      {/* Back button */}
       <div className='text-center'>
         <Button
           type='button'

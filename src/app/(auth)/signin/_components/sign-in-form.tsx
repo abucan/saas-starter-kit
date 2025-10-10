@@ -6,7 +6,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -22,7 +21,6 @@ type SignInFormProps = {
 export function SignInForm({ control, loading, onSubmit }: SignInFormProps) {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-focus email input on mount
   useEffect(() => {
     emailInputRef.current?.focus();
   }, []);
@@ -36,19 +34,16 @@ export function SignInForm({ control, loading, onSubmit }: SignInFormProps) {
 
   return (
     <div className='container max-w-sm space-y-8'>
-      {/* Header */}
       <div className='text-center space-y-2'>
         <h1 className='text-2xl font-bold tracking-tight'>Welcome back</h1>
         <p className='text-sm text-muted-foreground'>Sign in to your account</p>
       </div>
 
-      {/* OAuth Buttons */}
       <div className='space-y-3'>
         <OAuthButton provider='google' label='Continue with Google' />
         <OAuthButton provider='github' label='Continue with GitHub' />
       </div>
 
-      {/* Divider */}
       <div className='relative'>
         <div className='absolute inset-0 flex items-center'>
           <span className='w-full border-t' />
@@ -60,14 +55,12 @@ export function SignInForm({ control, loading, onSubmit }: SignInFormProps) {
         </div>
       </div>
 
-      {/* Email Form */}
       <div className='space-y-4'>
         <FormField
           control={control}
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email address</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -76,7 +69,7 @@ export function SignInForm({ control, loading, onSubmit }: SignInFormProps) {
                   placeholder='name@example.com'
                   autoComplete='email'
                   disabled={loading}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyPress}
                 />
               </FormControl>
               <FormMessage />
@@ -94,7 +87,6 @@ export function SignInForm({ control, loading, onSubmit }: SignInFormProps) {
         </Button>
       </div>
 
-      {/* Terms */}
       <p className='text-center text-xs text-muted-foreground'>
         By continuing, you agree to our Terms of Service and Privacy Policy
       </p>

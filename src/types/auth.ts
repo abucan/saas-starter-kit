@@ -4,11 +4,9 @@ import type {
   Invitation,
 } from '@/lib/db/schemas/auth.schema';
 
-// Role Types
 export type Role = 'owner' | 'admin' | 'member';
 export type InvitationStatus = 'pending' | 'accepted' | 'rejected' | 'canceled';
 
-// Organization Types
 export type OrganizationWithMetadata = Organization & {
   metadata: {
     isPersonal?: boolean;
@@ -21,7 +19,6 @@ export type FullOrganization = Organization & {
   invitations: Invitation[];
 };
 
-// Member Types
 export type MemberWithUser = Member & {
   user: {
     id: string;
@@ -47,7 +44,6 @@ export type MemberRow = MemberWithUser & {
   };
 };
 
-// Invitation Types
 export type InvitationRow = Invitation & {
   acceptUrl: string;
   _acl: {
@@ -57,7 +53,6 @@ export type InvitationRow = Invitation & {
   };
 };
 
-// Session Types
 export type SessionUser = {
   id: string;
   name: string;

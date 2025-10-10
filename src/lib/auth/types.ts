@@ -1,3 +1,4 @@
+/* TODO: SAFE DELETE LATER */
 import type { bAuth } from './auth';
 
 export type Session = typeof bAuth.$Infer.Session;
@@ -28,6 +29,7 @@ export type BetterAuthMember = {
 
 export type FullOrganization = BetterAuthOrganization & {
   members: BetterAuthMember[];
+  invitations: BetterAuthInvitation[];
 };
 
 export type BetterAuthInvitation = {

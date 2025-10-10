@@ -35,8 +35,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/features/*": ["./src/features/*"],
       "@/components/*": ["./src/components/*"],
+      "@/features/*": ["./src/features/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/types/*": ["./src/types/*"]
     }

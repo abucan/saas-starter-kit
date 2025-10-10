@@ -11,14 +11,7 @@ import type {
   NewSubscription,
 } from '@/lib/db/schemas/billing.schema';
 
-/**
- * Billing repository for Stripe customer and subscription operations
- */
 export const billingRepository = {
-  // ========================================
-  // CUSTOMER METHODS
-  // ========================================
-
   /**
    * Find Stripe customer by organization ID
    * @param orgId - Organization ID
@@ -72,10 +65,6 @@ export const billingRepository = {
       .returning();
     return updated as StripeCustomer;
   },
-
-  // ========================================
-  // SUBSCRIPTION METHODS
-  // ========================================
 
   /**
    * Find active subscription for organization
@@ -189,10 +178,6 @@ export const billingRepository = {
     await db.delete(subscriptions).where(eq(subscriptions.id, id));
   },
 
-  // ========================================
-  // COMPLEX QUERIES
-  // ========================================
-
   /**
    * Get subscription with customer details
    * @param orgId - Organization ID
@@ -222,10 +207,6 @@ export const billingRepository = {
       ),
     });
   },
-
-  // ========================================
-  // HELPER METHODS
-  // ========================================
 
   /**
    * Check if subscription is active

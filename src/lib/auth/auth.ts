@@ -7,6 +7,8 @@ import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schemas/auth.schema';
 import { AppError, ERROR_CODES } from '@/lib/errors';
 import { eq } from 'drizzle-orm';
+import { OTP_EXPIRY_SECONDS, OTP_LENGTH } from '../utils';
+// import { cookies } from 'next/headers';
 
 export const bAuth = betterAuth({
   database: drizzleAdapter(db, {
@@ -30,19 +32,19 @@ export const bAuth = betterAuth({
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      prompt: 'select_account',
+      prompt: 'select_account consent',
     },
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      prompt: 'select_account',
+      prompt: 'select_account consent',
     },
   },
 
   plugins: [
     emailOTP({
-      otpLength: 6,
-      expiresIn: 600,
+      otpLength: OTP_LENGTH,
+      expiresIn: OTP_EXPIRY_SECONDS,
       sendVerificationOnSignUp: true,
       allowedAttempts: 3,
       sendVerificationOTP: async ({}) => {
@@ -87,6 +89,7 @@ export const bAuth = betterAuth({
 
           const personalOrg = await db.query.organization.findFirst({
             where: eq(schema.organization.slug, personalSlug),
+            columns: { id: true, slug: true },
           });
 
           return {
@@ -110,33 +113,18 @@ export const bAuth = betterAuth({
             try {
               const existing = await db.query.organization.findFirst({
                 where: eq(schema.organization.slug, slug),
+                columns: { id: true, slug: true },
               });
 
-              if (!existing) {
-                await db.insert(schema.organization).values({
-                  id: crypto.randomUUID(),
-                  name: `${user.name}'s Workspace`,
-                  slug,
-                  createdAt: new Date(),
-                  metadata: JSON.stringify({
-                    isPersonal: true,
-                    default_role: 'member',
-                  }),
-                });
-
-                const newOrg = await db.query.organization.findFirst({
-                  where: eq(schema.organization.slug, slug),
-                });
-
-                if (newOrg) {
-                  await db.insert(schema.member).values({
-                    id: crypto.randomUUID(),
-                    organizationId: newOrg.id,
+              if (!existing?.id || !existing?.slug) {
+                await bAuth.api.createOrganization({
+                  body: {
+                    name: 'Personal Workspace',
+                    slug,
                     userId: user.id,
-                    role: 'owner',
-                    createdAt: new Date(),
-                  });
-                }
+                    metadata: { isPersonal: true, default_role: 'member' },
+                  },
+                });
                 break;
               } else {
                 const random = Math.floor(1000 + Math.random() * 9000);
@@ -160,6 +148,7 @@ export const bAuth = betterAuth({
   },
   user: {
     deleteUser: {
+      enabled: true,
       beforeDelete: async (user) => {
         const organizations = await bAuth.api.listOrganizations({
           query: {
@@ -186,6 +175,16 @@ export const bAuth = betterAuth({
             );
           }
         }
+      },
+      afterDelete: async ({}) => {
+        // TODO: Enable this later if needed
+        /*
+        try {
+          ;(await cookies()).delete(SESSION_COOKIE_NAME)
+        } catch (error: unknown) {
+          console.error('Error during post-delete cleanup:', error)
+        }
+        */
       },
     },
   },

@@ -1,12 +1,8 @@
-// src/features/user/repositories/user.repository.ts
 import { eq } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { user } from '@/lib/db/schemas/auth.schema';
 import type { User, NewUser } from '@/lib/db/schemas/auth.schema';
 
-/**
- * User repository for database operations
- */
 export const userRepository = {
   /**
    * Find user by ID

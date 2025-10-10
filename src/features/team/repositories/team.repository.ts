@@ -10,14 +10,7 @@ import type {
   NewInvitation,
 } from '@/lib/db/schemas/auth.schema';
 
-/**
- * Team/Organization repository for database operations
- */
 export const teamRepository = {
-  // ========================================
-  // ORGANIZATION METHODS
-  // ========================================
-
   /**
    * Find organization by ID
    * @param id - Organization ID
@@ -87,10 +80,6 @@ export const teamRepository = {
   async delete(id: string): Promise<void> {
     await db.delete(organization).where(eq(organization.id, id));
   },
-
-  // ========================================
-  // MEMBER METHODS
-  // ========================================
 
   /**
    * Get all members of an organization
@@ -165,10 +154,6 @@ export const teamRepository = {
     return result[0]?.count ?? 0;
   },
 
-  // ========================================
-  // INVITATION METHODS
-  // ========================================
-
   /**
    * Get all invitations for organization
    * @param orgId - Organization ID
@@ -227,10 +212,6 @@ export const teamRepository = {
   async deleteInvitation(id: string): Promise<void> {
     await db.delete(invitation).where(eq(invitation.id, id));
   },
-
-  // ========================================
-  // COMPLEX QUERIES
-  // ========================================
 
   /**
    * Get organization with all members (including user details)

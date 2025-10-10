@@ -8,7 +8,6 @@ export function useOtpCountdown(initialSeconds: number = 60) {
   const [timeRemaining, setTimeRemaining] = useState(initialSeconds);
   const [isActive, setIsActive] = useState(false);
 
-  // Format time as MM:SS
   const formattedTime = (() => {
     const minutes = Math.floor(timeRemaining / 60);
     const seconds = timeRemaining % 60;
@@ -17,10 +16,8 @@ export function useOtpCountdown(initialSeconds: number = 60) {
       .padStart(2, '0')}`;
   })();
 
-  // Computed: can resend when countdown reaches 0
   const canResend = timeRemaining === 0;
 
-  // Countdown effect
   useEffect(() => {
     if (!isActive || timeRemaining === 0) return;
 
@@ -37,18 +34,15 @@ export function useOtpCountdown(initialSeconds: number = 60) {
     return () => clearInterval(interval);
   }, [isActive, timeRemaining]);
 
-  // Start countdown
   const startCountdown = useCallback(() => {
     setTimeRemaining(initialSeconds);
     setIsActive(true);
   }, [initialSeconds]);
 
-  // Stop countdown
   const stopCountdown = useCallback(() => {
     setIsActive(false);
   }, []);
 
-  // Reset countdown
   const resetCountdown = useCallback(() => {
     setTimeRemaining(initialSeconds);
     setIsActive(false);
