@@ -40,6 +40,8 @@ export const getDashboardContext = cache(async () => {
       slug: org.slug!,
       name: org.name,
       isPersonal: Boolean(org.metadata?.isPersonal),
+      logo: org.logo,
+      defaultRole: org.metadata?.default_role as 'member' | 'admin' | 'owner',
     },
     membership: { role },
     teams: teams ?? [],
