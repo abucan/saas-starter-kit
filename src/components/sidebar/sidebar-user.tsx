@@ -6,7 +6,6 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Sparkles,
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -25,13 +24,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { AppSidebarProps } from './app-sidebar';
+import Link from 'next/link';
+import { signOut } from '@/lib/auth/auth-client';
+import { SidebarContext } from '@/types/sidebar';
 
-export function SidebarUser({
-  user,
-}: {
-  user: AppSidebarProps['ctx']['user'];
-}) {
+export function SidebarUser({ user }: { user: SidebarContext['user'] }) {
   const { isMobile } = useSidebar();
 
   return (
@@ -88,20 +85,17 @@ export function SidebarUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+              <DropdownMenuItem asChild>
+                <Link href='/account/profile'>
+                  <BadgeCheck />
+                  Account
+                </Link>
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
+              <DropdownMenuItem asChild>
+                <Link href='/account/billing'>
+                  <CreditCard />
+                  Billing
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
@@ -109,7 +103,12 @@ export function SidebarUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await signOut();
+                window.location.href = '/signin';
+              }}
+            >
               <LogOut />
               Sign out
             </DropdownMenuItem>

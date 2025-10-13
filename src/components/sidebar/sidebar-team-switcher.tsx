@@ -84,7 +84,13 @@ export function SidebarTeamSwitcher({
                 Teams
               </DropdownMenuLabel>
               {teams.map((team) => (
-                <DropdownMenuItem key={team.slug} className='gap-2 p-2'>
+                <DropdownMenuItem
+                  key={team.slug}
+                  className='gap-2 p-2'
+                  onClick={() => {
+                    console.log('switch to team', team.id);
+                  }}
+                >
                   <div className='flex size-6 items-center justify-center rounded-md border'>
                     <Image
                       src={team.logo ?? '/avatars/shadcn.jfif'}

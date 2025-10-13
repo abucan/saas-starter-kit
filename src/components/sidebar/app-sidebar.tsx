@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { BookOpen, Home, Key, User, Users } from 'lucide-react';
+import { BookOpen, Key } from 'lucide-react';
 
 import { SidebarMain } from '@/components/sidebar/sidebar-main';
 import { SidebarProjects } from '@/components/sidebar/sidebar-projects';
@@ -14,52 +14,16 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { Organization } from '@/lib/auth/auth';
-
-export type AppSidebarProps = {
-  ctx: {
-    user: {
-      id: string;
-      email: string;
-      name: string | null;
-      image: string | null;
-    };
-    org: { id: string; slug: string; name: string; isPersonal?: boolean };
-    membership: { role: 'owner' | 'admin' | 'member' };
-    teams: Organization[] | undefined;
-  };
-};
+import { navigationConfig } from '@/config/navigation';
+import { SidebarContext } from '@/types/sidebar';
 
 export function AppSidebar({
   ctx,
   ...props
-}: React.ComponentProps<typeof Sidebar> & AppSidebarProps) {
+}: React.ComponentProps<typeof Sidebar> & { ctx: SidebarContext }) {
   const data = React.useMemo(() => {
     return {
-      navMain: [
-        { title: 'Dashboard', url: '/dashboard', icon: Home },
-        {
-          title: 'Workspace',
-          url: '/workspace',
-          icon: Users,
-          items: [
-            { title: 'Overview', url: '/workspace/overview' },
-            { title: 'Members', url: '/workspace/members' },
-            { title: 'Invitations', url: '/workspace/invitations' },
-            { title: 'Settings', url: '/workspace/settings' },
-          ],
-        },
-        {
-          title: 'Account',
-          url: '/account',
-          icon: User,
-          items: [
-            { title: 'Profile', url: '/account/profile' },
-            { title: 'Billing', url: '/account/billing' },
-            { title: 'Security', url: '/account/security' },
-          ],
-        },
-      ],
+      navMain: navigationConfig.main,
       projects: [{ name: 'Keyvaultify (DEMO)', url: '#', icon: Key }],
       docs: { title: 'Documentation', url: '#', icon: BookOpen },
     };
