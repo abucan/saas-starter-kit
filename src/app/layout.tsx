@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Toaster } from '@/components/ui/sonner';
 import { Bricolage_Grotesque, Spectral } from 'next/font/google';
 import './globals.css';
 
@@ -29,7 +30,8 @@ export default function RootLayout({
       <body
         className={`${fontBricolageGrotesque.variable} ${fontSpectral.variable} antialiased`}
       >
-        {children}
+        <main>{children}</main>
+        <Toaster position='top-center' />
       </body>
     </html>
   );

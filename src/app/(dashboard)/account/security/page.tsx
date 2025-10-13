@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { DeleteAccountCard } from './_components/delete-account-card';
 
 export const metadata: Metadata = {
   title: 'Security | Keyvaultify',
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function SecurityPage() {
-  return <div>Security</div>;
+  return (
+    <div className='flex flex-col gap-6'>
+      <DeleteAccountCard />
+    </div>
+  );
 }

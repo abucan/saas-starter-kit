@@ -1,9 +1,10 @@
 import 'server-only';
+import { cache } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { bAuth } from '@/lib/auth/auth';
 
-export async function getDashboardContext() {
+export const getDashboardContext = cache(async () => {
   const session = await bAuth.api.getSession({
     headers: await headers(),
   });
@@ -17,7 +18,7 @@ export async function getDashboardContext() {
   });
 
   if (!org?.id) {
-    redirect('/signin'); // Or create personal workspace
+    redirect('/signin'); // TODO: Or create personal workspace
   }
 
   const teams = await bAuth.api.listOrganizations({
@@ -43,4 +44,4 @@ export async function getDashboardContext() {
     membership: { role },
     teams: teams ?? [],
   };
-}
+});
