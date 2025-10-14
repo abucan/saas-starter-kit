@@ -1,11 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import Image from 'next/image';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 
-// import { switchTeamAction } from '@/app/(private)/team/actions/switchTeamAction';
 // import { AddTeamForm } from '@/app/(private)/team/components/AddTeamForm';
 // import { AddDialog } from '@/components/shared/AddDialog';
 // import { toastRes } from '@/components/toast-result';
@@ -24,6 +23,9 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Organization } from '@/lib/auth/auth';
+import { switchWorkspaceAction } from '@/features/workspace/actions/switch-workspace.action';
+import { toast } from 'sonner';
+import { CreateWorkspaceDialog } from './create-workspace-dialog';
 
 export function SidebarTeamSwitcher({
   teams,
@@ -36,7 +38,7 @@ export function SidebarTeamSwitcher({
 
   const { isMobile } = useSidebar();
 
-  const [addTeamDialogOpen, setAddTeamDialogOpen] = React.useState(false);
+  const [addWorkspaceDialogOpen, setAddWorkspaceDialogOpen] = useState(false);
 
   const activeTeam = React.useMemo(
     () => teams.find((t) => t.id === orgId) ?? teams[0],
@@ -45,6 +47,10 @@ export function SidebarTeamSwitcher({
 
   return (
     <>
+      <CreateWorkspaceDialog
+        open={addWorkspaceDialogOpen}
+        onOpenChange={setAddWorkspaceDialogOpen}
+      />
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu modal={false}>
@@ -88,7 +94,14 @@ export function SidebarTeamSwitcher({
                   key={team.slug}
                   className='gap-2 p-2'
                   onClick={() => {
-                    console.log('switch to team', team.id);
+                    startTransition(async () => {
+                      const res = await switchWorkspaceAction(team.id);
+                      if (!res.ok) {
+                        toast.error(
+                          res.message || 'Failed to switch workspace'
+                        );
+                      }
+                    });
                   }}
                 >
                   <div className='flex size-6 items-center justify-center rounded-md border'>
@@ -106,7 +119,7 @@ export function SidebarTeamSwitcher({
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className='gap-2 p-2'
-                onClick={() => setAddTeamDialogOpen(true)}
+                onClick={() => setAddWorkspaceDialogOpen(true)}
                 disabled={pending}
               >
                 <div className='flex flex-row items-center gap-2'>
@@ -114,7 +127,7 @@ export function SidebarTeamSwitcher({
                     <Plus className='size-4' />
                   </div>
                   <div className='text-muted-foreground font-medium font-bricolage-grotesque'>
-                    Add team
+                    Add workspace
                   </div>
                 </div>
               </DropdownMenuItem>

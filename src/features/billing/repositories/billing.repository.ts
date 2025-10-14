@@ -13,15 +13,15 @@ import type {
 
 export const billingRepository = {
   /**
-   * Find Stripe customer by organization ID
-   * @param orgId - Organization ID
+   * Find Stripe customer by user ID
+   * @param userId - User ID
    * @returns StripeCustomer object or undefined if not found
    */
-  async findCustomerByOrgId(
-    orgId: string
+  async findCustomerByUserId(
+    userId: string
   ): Promise<StripeCustomer | undefined> {
     return await db.query.stripeCustomers.findFirst({
-      where: eq(stripeCustomers.organizationId, orgId),
+      where: eq(stripeCustomers.userId, userId),
     });
   },
 
@@ -50,32 +50,32 @@ export const billingRepository = {
 
   /**
    * Update Stripe customer
-   * @param orgId - Organization ID
+   * @param userId - User ID
    * @param data - Partial customer data to update
    * @returns Updated customer object
    */
   async updateCustomer(
-    orgId: string,
+    userId: string,
     data: Partial<StripeCustomer>
   ): Promise<StripeCustomer> {
     const [updated] = await db
       .update(stripeCustomers)
       .set({ ...data, updatedAt: new Date() })
-      .where(eq(stripeCustomers.organizationId, orgId))
+      .where(eq(stripeCustomers.userId, userId))
       .returning();
     return updated as StripeCustomer;
   },
 
   /**
-   * Find active subscription for organization
-   * @param orgId - Organization ID
+   * Find active subscription for user
+   * @param userId - User ID
    * @returns Subscription object or undefined if not found
    */
-  async findSubscriptionByOrgId(
-    orgId: string
+  async findSubscriptionByUserId(
+    userId: string
   ): Promise<Subscription | undefined> {
     return await db.query.subscriptions.findFirst({
-      where: eq(subscriptions.organizationId, orgId),
+      where: eq(subscriptions.userId, userId),
       orderBy: [desc(subscriptions.createdAt)],
     });
   },
@@ -183,11 +183,11 @@ export const billingRepository = {
    * @param orgId - Organization ID
    * @returns Subscription with customer or undefined
    */
-  async getSubscriptionWithCustomer(orgId: string) {
-    const subscription = await this.findSubscriptionByOrgId(orgId);
+  async getSubscriptionWithCustomer(userId: string) {
+    const subscription = await this.findSubscriptionByUserId(userId);
     if (!subscription) return undefined;
 
-    const customer = await this.findCustomerByOrgId(orgId);
+    const customer = await this.findCustomerByUserId(userId);
     return {
       subscription,
       customer,

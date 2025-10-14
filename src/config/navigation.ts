@@ -8,7 +8,6 @@ export const navigationConfig = {
       url: '/workspace',
       icon: Users,
       items: [
-        { title: 'Overview', url: '/workspace/overview' },
         { title: 'Members', url: '/workspace/members' },
         { title: 'Invitations', url: '/workspace/invitations' },
         { title: 'Settings', url: '/workspace/settings' },

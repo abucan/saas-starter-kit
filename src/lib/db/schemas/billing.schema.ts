@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const stripeCustomers = sqliteTable('stripe_customers', {
-  organizationId: text('organization_id').primaryKey(), // FK to Organization.id (BetterAuth)
+  userId: text('user_id').primaryKey(), // FK to User.id (BetterAuth)
   stripeCustomerId: text('stripe_customer_id').notNull().unique(),
   createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .notNull()
@@ -18,7 +18,7 @@ export const subscriptions = sqliteTable('subscriptions', {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
 
-  organizationId: text('organization_id').notNull(), // FK to BetterAuth Organization.id
+  userId: text('user_id').notNull(), // FK to BetterAuth User.id
   stripeSubscriptionId: text('stripe_subscription_id').unique(), // null for lifetime/one-time
   stripeCustomerId: text('stripe_customer_id').notNull(),
 
@@ -52,8 +52,8 @@ export const subscriptions = sqliteTable('subscriptions', {
 export const stripeCustomerIdIdx = index('stripe_customer_id_idx').on(
   stripeCustomers.stripeCustomerId
 );
-export const subscriptionOrgIdIdx = index('subscription_org_id_idx').on(
-  subscriptions.organizationId
+export const subscriptionUserIdIdx = index('subscription_user_id_idx').on(
+  subscriptions.userId
 );
 export const subscriptionStripeIdIdx = index('subscription_stripe_id_idx').on(
   subscriptions.stripeSubscriptionId
