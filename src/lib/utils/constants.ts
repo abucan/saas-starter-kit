@@ -1,5 +1,5 @@
 // App Configuration
-export const APP_NAME = 'KeyVaultify';
+export const APP_NAME = 'Keyvaultify';
 export const APP_DESCRIPTION = 'Secure secrets management for modern teams';
 export const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';

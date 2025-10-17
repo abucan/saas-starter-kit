@@ -10,6 +10,7 @@ import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schemas/auth.schema';
 import { AppError, ERROR_CODES } from '@/lib/errors';
 
+import { sendOTPEmail, sendWorkspaceInviteEmail } from '../email/service';
 import { OTP_EXPIRY_SECONDS, OTP_LENGTH } from '../utils';
 // import { cookies } from 'next/headers';
 
@@ -50,16 +51,21 @@ export const bAuth = betterAuth({
       expiresIn: OTP_EXPIRY_SECONDS,
       sendVerificationOnSignUp: true,
       allowedAttempts: 3,
-      sendVerificationOTP: async ({}) => {
-        // await sendOTPEmail(email, otp);
+      sendVerificationOTP: async ({ email, otp }) => {
+        await sendOTPEmail({ email, otp, type: 'sign-in' });
       },
     }),
 
     organization({
       requireEmailVerificationOnInvitation: true,
-      sendInvitationEmail: async ({}) => {
-        // const acceptUrl = `${process.env.NEXT_PUBLIC_APP_URL}/invitation/${invitationId}`;
-        // await sendInvitationEmail({});
+      sendInvitationEmail: async ({ invitation, organization, inviter }) => {
+        const acceptUrl = `${process.env.NEXT_PUBLIC_APP_URL}/accept-invitation/${invitation.id}`;
+        await sendWorkspaceInviteEmail({
+          email: invitation.email,
+          teamName: organization.name,
+          acceptUrl,
+          inviterName: inviter?.user?.name || inviter?.user?.email,
+        });
       },
       organizationDeletion: {
         afterDelete: async ({ user }) => {

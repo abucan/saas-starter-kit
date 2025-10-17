@@ -1,8 +1,8 @@
-# KeyVaultify
+# Keyvaultify
 
 ## Project Overview
 
-KeyVaultify is a secure secrets management platform designed for modern teams. It provides a centralized, encrypted solution for storing and managing API keys, credentials, and other sensitive data across different environments.
+Keyvaultify is a secure secrets management platform designed for modern teams. It provides a centralized, encrypted solution for storing and managing API keys, credentials, and other sensitive data across different environments.
 
 ### Tech Stack
 

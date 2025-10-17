@@ -16,7 +16,7 @@ const fontSpectral = Spectral({
 });
 
 export const metadata: Metadata = {
-  title: 'KeyVaultify App',
+  title: 'Keyvaultify App',
   description: 'Multi-Environment Secret Management',
 };
 

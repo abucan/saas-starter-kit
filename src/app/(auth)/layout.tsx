@@ -5,8 +5,8 @@ import { AnimatedTerminal } from './signin/_components';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | KeyVaultify',
-    default: 'Authentication | KeyVaultify',
+    template: '%s | Keyvaultify',
+    default: 'Authentication | Keyvaultify',
   },
   description: 'Secure authentication for your account',
 };

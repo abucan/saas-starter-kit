@@ -2,7 +2,7 @@
 
 ## Overview
 
-KeyVaultify uses **Drizzle ORM** with **SQLite** (development) and **Turso** (production) for database management. The database is organized into feature-based schemas with type-safe repositories.
+Keyvaultify uses **Drizzle ORM** with **SQLite** (development) and **Turso** (production) for database management. The database is organized into feature-based schemas with type-safe repositories.
 
 ## Schema Structure
 
@@ -87,16 +87,16 @@ Drizzle relations enable type-safe `.with()` queries:
 
 ```typescript
 // User has many sessions, accounts, members, invitations
-userRelations: sessions, accounts, members, invitations;
+userRelations: (sessions, accounts, members, invitations);
 
 // Member belongs to user and organization
-memberRelations: user, organization;
+memberRelations: (user, organization);
 
 // Organization has many members and invitations
-organizationRelations: members, invitations;
+organizationRelations: (members, invitations);
 
 // Invitation belongs to organization and inviter (user)
-invitationRelations: organization, inviter;
+invitationRelations: (organization, inviter);
 ```
 
 ## Available Repositories

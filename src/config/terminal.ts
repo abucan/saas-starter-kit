@@ -11,7 +11,7 @@ export interface Step {
 export const terminalSteps: Step[] = [
   {
     title: 'Login to Your Account',
-    description: 'Authenticate with your KeyVaultify API token',
+    description: 'Authenticate with your Keyvaultify API token',
     command: {
       input: 'keyvault login',
       output: [
@@ -24,13 +24,13 @@ export const terminalSteps: Step[] = [
   },
   {
     title: 'Initialize Your Project',
-    description: 'Link your local project to KeyVaultify',
+    description: 'Link your local project to Keyvaultify',
     command: {
       input: 'keyvault init',
       output: [
         '🆔 Enter your Project ID: my-awesome-app',
         '🌱 Environment (default: dev): production',
-        '✅ Project initialized and linked to KeyVaultify.',
+        '✅ Project initialized and linked to Keyvaultify.',
         '📝 Config saved to .keyvaultify/project.json',
       ],
       delay: 3500,
