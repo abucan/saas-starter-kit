@@ -1,6 +1,6 @@
 import { Heading, Link, Text } from '@react-email/components';
 
-import EmailLayout from '@/lib/email/templates/email-layout';
+import EmailLayout from '@/lib/email/templates/email-layout.template';
 
 type WorkspaceInviteEmailProps = {
   inviterName?: string;

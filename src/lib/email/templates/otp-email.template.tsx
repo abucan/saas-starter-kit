@@ -1,7 +1,7 @@
 import { Heading, Section, Text } from '@react-email/components';
 
 import { OtpType } from '@/features/auth/types';
-import EmailLayout from '@/lib/email/templates/email-layout';
+import EmailLayout from '@/lib/email/templates/email-layout.template';
 
 type OTPEmailProps = {
   otp: string;
