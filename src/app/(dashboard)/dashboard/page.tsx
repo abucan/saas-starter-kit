@@ -1,5 +1,6 @@
-import { ToastOnce } from '@/components/shared/toast-once';
 import { cookies } from 'next/headers';
+
+import { ToastOnce } from '@/components/shared/toast-once';
 
 export default async function DashboardPage() {
   const c = await cookies();

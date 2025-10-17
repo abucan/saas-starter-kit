@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { betterFetch } from '@better-fetch/fetch';
+
 import type { Session } from '@/lib/auth/auth';
 
 const PUBLIC_ROUTES = ['/', '/signin', '/signup'];

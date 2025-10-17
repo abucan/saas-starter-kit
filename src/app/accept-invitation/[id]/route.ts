@@ -10,30 +10,26 @@ export async function GET(
   const { id: invitationId } = await params;
 
   try {
-    // Accept the invitation using Better Auth
     await bAuth.api.acceptInvitation({
       headers: await headers(),
       body: { invitationId },
     });
 
-    // Create redirect response to dashboard
     const redirectUrl = new URL('/dashboard', request.url);
     const response = NextResponse.redirect(redirectUrl);
 
-    // Set toast cookie to show success message
     response.cookies.set('kvf_toast', 'INVITE_ACCEPTED', {
-      maxAge: 10, // 10 seconds
+      maxAge: 10,
       path: '/',
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
-      httpOnly: false, // Needs to be readable by client
+      httpOnly: false,
     });
 
     return response;
   } catch (error) {
     console.error('Error accepting invitation:', error);
 
-    // Redirect to sign-in with next parameter to retry after login
     const signInUrl = new URL('/signin', request.url);
     signInUrl.searchParams.set('next', `/accept-invitation/${invitationId}`);
     return NextResponse.redirect(signInUrl);

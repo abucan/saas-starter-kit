@@ -1,6 +1,8 @@
-import type { Metadata } from 'next';
-import { Toaster } from '@/components/ui/sonner';
 import { Bricolage_Grotesque, Spectral } from 'next/font/google';
+import type { Metadata } from 'next';
+
+import { Toaster } from '@/components/ui/sonner';
+
 import './globals.css';
 
 const fontBricolageGrotesque = Bricolage_Grotesque({
