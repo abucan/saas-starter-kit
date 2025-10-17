@@ -1,8 +1,9 @@
 'use server';
 
-import { authService } from '../services/auth.service';
 import { handleError } from '@/lib/errors/error-handler';
 import type { R } from '@/types/result';
+
+import { authService } from '../services/auth.service';
 import type { SignInWithEmailInput } from '../types';
 
 export async function signInWithEmailAction(input: unknown): Promise<R> {

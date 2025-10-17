@@ -1,13 +1,16 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
+
 import { bAuth } from '@/lib/auth/auth';
+
 import {
-  signInWithEmailSchema,
-  verifyOtpSchema,
+  type ResendOtpInput,
   resendOtpSchema,
   type SignInWithEmailInput,
+  signInWithEmailSchema,
   type VerifyOtpInput,
-  type ResendOtpInput,
+  verifyOtpSchema,
 } from '../schemas/auth.schema';
 
 export const authService = {

@@ -1,7 +1,7 @@
 export type {
+  ResendOtpInput,
   SignInWithEmailInput,
   VerifyOtpInput,
-  ResendOtpInput,
 } from './schemas/auth.schema';
 
 export type AuthStep = 'email' | 'otp';

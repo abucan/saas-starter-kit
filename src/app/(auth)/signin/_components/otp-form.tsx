@@ -1,23 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Control } from 'react-hook-form';
+import { Control, UseFormReturn } from 'react-hook-form';
+import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
 import {
   FormControl,
   FormField,
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { useOtpCountdown } from '@/features/auth/hooks/use-otp-countdown';
-import { resendOtpAction } from '@/features/auth/actions';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { resendOtpAction } from '@/features/auth/actions/resend-otp.action';
+import { useOtpCountdown } from '@/features/auth/hooks/use-otp-countdown';
 
 type OTPFormProps = {
+  form: UseFormReturn<{ email: string; otp: string }>;
   control: Control<{ email: string; otp: string }>;
   email: string;
   loading: boolean;
@@ -26,6 +29,7 @@ type OTPFormProps = {
 };
 
 export function OTPForm({
+  form,
   control,
   email,
   loading,
@@ -45,7 +49,12 @@ export function OTPForm({
     setResending(false);
 
     if (result.ok) {
+      form.setValue('otp', '');
+      form.clearErrors('otp');
+      toast.success('A new code has been sent to your email.');
       startCountdown();
+    } else {
+      form.setError('otp', { message: 'Failed to resend code' });
     }
   };
 
@@ -106,7 +115,7 @@ export function OTPForm({
             variant='link'
             onClick={handleResend}
             disabled={!canResend || resending}
-            className='text-sm'
+            className='text-sm text-foreground'
           >
             {resending
               ? 'Sending...'

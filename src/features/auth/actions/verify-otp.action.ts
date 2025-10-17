@@ -1,9 +1,11 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { authService } from '../services/auth.service';
+
 import { handleError } from '@/lib/errors/error-handler';
 import type { R } from '@/types/result';
+
+import { authService } from '../services/auth.service';
 import type { VerifyOtpInput } from '../types';
 
 type RedirectPath = '/dashboard' | (string & {});

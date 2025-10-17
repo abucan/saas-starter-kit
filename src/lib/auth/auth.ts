@@ -1,12 +1,15 @@
 import 'server-only';
+
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { emailOTP, organization } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
+import { emailOTP, organization } from 'better-auth/plugins';
+import { eq } from 'drizzle-orm';
+
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schemas/auth.schema';
 import { AppError, ERROR_CODES } from '@/lib/errors';
-import { eq } from 'drizzle-orm';
+
 import { OTP_EXPIRY_SECONDS, OTP_LENGTH } from '../utils';
 // import { cookies } from 'next/headers';
 

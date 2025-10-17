@@ -2,18 +2,21 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+
 import { Form } from '@/components/ui/form';
+import { signInWithEmailAction } from '@/features/auth/actions/sign-in-with-email.action';
+import { verifyOtpAction } from '@/features/auth/actions/verify-otp.action';
 import {
-  signInWithEmailAction,
-  verifyOtpAction,
-} from '@/features/auth/actions';
+  SignInInput,
+  signInSchema,
+  signInWithEmailSchema,
+  verifyOtpSchema,
+} from '@/features/auth/schemas/auth.schema';
 import type { AuthStep } from '@/features/auth/types';
-import { SignInForm } from './_components/sign-in-form';
-import { OTPForm } from './_components/otp-form';
-import { SignInInput, signInSchema } from '@/features/auth/schemas/auth.schema';
+
+import { OTPForm, SignInForm } from './_components';
 
 export default function SignInPage() {
   const [currentStep, setCurrentStep] = useState<AuthStep>('email');
@@ -27,7 +30,7 @@ export default function SignInPage() {
       email: '',
       otp: '',
     },
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
 
   const next = searchParams.get('next') || '/dashboard';
@@ -37,7 +40,7 @@ export default function SignInPage() {
   const handleEmailSubmit = async () => {
     const email = form.getValues('email');
 
-    const emailValidation = z.string().email().safeParse(email);
+    const emailValidation = signInWithEmailSchema.safeParse({ email: email });
     if (!emailValidation.success) {
       form.setError('email', { message: 'Please enter a valid email address' });
       return;
@@ -65,7 +68,7 @@ export default function SignInPage() {
   const handleOtpSubmit = async () => {
     const otp = form.getValues('otp');
 
-    const otpValidation = z.string().length(6).safeParse(otp);
+    const otpValidation = verifyOtpSchema.safeParse({ email: email, otp: otp });
     if (!otpValidation.success) {
       form.setError('otp', { message: 'Please enter a valid 6-digit code' });
       return;
@@ -91,6 +94,7 @@ export default function SignInPage() {
     setCurrentStep('email');
     form.setValue('otp', '');
     form.clearErrors('otp');
+    form.clearErrors('email');
   };
 
   return (
@@ -104,6 +108,7 @@ export default function SignInPage() {
           />
         ) : (
           <OTPForm
+            form={form}
             control={form.control}
             email={email}
             loading={loading}

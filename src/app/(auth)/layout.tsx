@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
 import { ShieldCheck } from 'lucide-react';
+import type { Metadata } from 'next';
+
 import { AnimatedTerminal } from './signin/_components';
 
 export const metadata: Metadata = {

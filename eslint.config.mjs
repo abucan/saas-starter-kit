@@ -1,6 +1,7 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,14 +11,47 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      // 🔽 core: sort imports & exports
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            // 1) side-effect imports (e.g., "server-only"; CSS)
+            ['^\\u0000'],
+
+            // 2) React/Next first (optional), then packages
+            ['^react$', '^next(/.*)?$', '^@?\\w'],
+
+            // 3) Internal alias (keep '@/...' together)
+            ['^@/'],
+
+            // 4) Parent imports then same-folder relatives
+            ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+
+            // 5) Types (optional: keep them last if you like)
+            ['^type:.*'],
+
+            // 6) Styles last
+            ['^.+\\.s?css$'],
+          ],
+        },
+      ],
+      'simple-import-sort/exports': 'error',
+    },
     ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
+      'node_modules/**',
+      '.next/**',
+      'out/**',
+      'build/**',
+      'next-env.d.ts',
     ],
   },
 ];

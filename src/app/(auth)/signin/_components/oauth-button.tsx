@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
 import { authClient } from '@/lib/auth/auth-client';
-import Image from 'next/image';
 
 type OAuthButtonProps = {
   provider: 'google' | 'github';

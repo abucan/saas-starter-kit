@@ -1,22 +1,18 @@
 import { z } from 'zod';
 
 export const signInSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.email('Please enter a valid email address'),
   otp: z.string().length(6, 'OTP must be 6 digits'),
 });
 
 export const signInWithEmailSchema = z.object({
   email: z
-    .string()
-    .min(1, 'Email is required')
     .email('Please enter a valid email address')
     .transform((val) => val.trim().toLowerCase()),
 });
 
 export const verifyOtpSchema = z.object({
   email: z
-    .string()
-    .min(1, 'Email is required')
     .email('Please enter a valid email address')
     .transform((val) => val.trim().toLowerCase()),
   otp: z
@@ -27,8 +23,6 @@ export const verifyOtpSchema = z.object({
 
 export const resendOtpSchema = z.object({
   email: z
-    .string()
-    .min(1, 'Email is required')
     .email('Please enter a valid email address')
     .transform((val) => val.trim().toLowerCase()),
 });
