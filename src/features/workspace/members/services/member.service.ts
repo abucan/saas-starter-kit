@@ -1,14 +1,17 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-import { bAuth } from '@/lib/auth/auth';
+
 import type { Organization } from '@/lib/auth/auth';
+import { auth } from '@/lib/auth/auth';
 import { requireActiveMember } from '@/lib/auth/guards';
 import { isPersonalWorkspace } from '@/lib/auth/org-context';
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
+
 import {
-  updateMemberRoleSchema,
   removeMemberSchema,
+  updateMemberRoleSchema,
 } from '../schemas/members.schema';
 
 export const membersService = {
@@ -30,7 +33,7 @@ export const membersService = {
         );
       }
 
-      const org = await bAuth.api.getFullOrganization({
+      const org = await auth.api.getFullOrganization({
         headers: await headers(),
       });
 
@@ -56,7 +59,7 @@ export const membersService = {
         }
       }
 
-      await bAuth.api.updateMemberRole({
+      await auth.api.updateMemberRole({
         headers: await headers(),
         body: {
           memberId: validated.memberId,
@@ -101,7 +104,7 @@ export const membersService = {
         );
       }
 
-      const org = await bAuth.api.getFullOrganization({
+      const org = await auth.api.getFullOrganization({
         headers: await headers(),
       });
 
@@ -143,7 +146,7 @@ export const membersService = {
         }
       }
 
-      await bAuth.api.removeMember({
+      await auth.api.removeMember({
         headers: await headers(),
         body: {
           memberIdOrEmail: validated.memberId,
@@ -175,7 +178,7 @@ export const membersService = {
     try {
       const currentMember = await requireActiveMember();
 
-      const org = await bAuth.api.getFullOrganization({
+      const org = await auth.api.getFullOrganization({
         headers: await headers(),
       });
 
@@ -204,14 +207,14 @@ export const membersService = {
         );
       }
 
-      await bAuth.api.leaveOrganization({
+      await auth.api.leaveOrganization({
         headers: await headers(),
         body: {
           organizationId: org.id,
         },
       });
 
-      const organizations = await bAuth.api.listOrganizations({
+      const organizations = await auth.api.listOrganizations({
         headers: await headers(),
       });
 
@@ -222,19 +225,19 @@ export const membersService = {
       });
 
       if (personalWorkspace?.id) {
-        await bAuth.api.setActiveOrganization({
+        await auth.api.setActiveOrganization({
           headers: await headers(),
           body: {
             organizationId: personalWorkspace.id,
           },
         });
       } else {
-        const session = await bAuth.api.getSession({
+        const session = await auth.api.getSession({
           headers: await headers(),
         });
         const personalSlug = `pw-${session?.user.id}`;
 
-        await bAuth.api.setActiveOrganization({
+        await auth.api.setActiveOrganization({
           headers: await headers(),
           body: {
             organizationSlug: personalSlug,

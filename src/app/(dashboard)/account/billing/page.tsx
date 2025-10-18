@@ -13,22 +13,17 @@ export const metadata: Metadata = {
 
 export default async function BillingPage() {
   const { subscription } = await getDashboardContext();
+
   return (
-    <div className='flex flex-col gap-6 w-full'>
-      <div className='flex flex-col gap-1'>
-        <h2 className='text-xl font-bold font-bricolage-grotesque'>
-          Choose a Plan
-        </h2>
-        <p className='text-sm text-muted-foreground font-bricolage-grotesque'>
-          Choose the plan that best suits your needs.
-        </p>
-      </div>
-
+    <div className='flex flex-col gap-6 max-w-2xl w-full'>
       <CurrentPlanCard subscription={subscription} />
-
-      <PricingTables currentPlan={subscription.plan} />
-
-      {subscription.isActive && <ManageBillingCard />}
+      <PricingTables
+        currentPlan={subscription.plan}
+        currentInterval={subscription.interval}
+      />
+      {(subscription.isActive || subscription.cancelAtPeriodEnd) && (
+        <ManageBillingCard subscription={subscription} />
+      )}
     </div>
   );
 }

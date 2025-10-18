@@ -1,13 +1,16 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-import { bAuth } from '@/lib/auth/auth';
+
+import { auth } from '@/lib/auth/auth';
 import { requireActiveMember } from '@/lib/auth/guards';
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
+
 import {
+  cancelInvitationSchema,
   inviteMemberSchema,
   resendInvitationSchema,
-  cancelInvitationSchema,
 } from '../schemas/invitations.schema';
 
 export const invitationsService = {
@@ -36,7 +39,7 @@ export const invitationsService = {
       }
 
       // Create invitation via Better Auth
-      await bAuth.api.createInvitation({
+      await auth.api.createInvitation({
         headers: await headers(),
         body: {
           email: validated.email,
@@ -95,7 +98,7 @@ export const invitationsService = {
       }
 
       // Resend invitation via Better Auth (uses createInvitation with resend flag)
-      await bAuth.api.createInvitation({
+      await auth.api.createInvitation({
         headers: await headers(),
         body: {
           email: validated.email,
@@ -155,7 +158,7 @@ export const invitationsService = {
       }
 
       // Cancel invitation via Better Auth
-      const result = await bAuth.api.cancelInvitation({
+      const result = await auth.api.cancelInvitation({
         headers: await headers(),
         body: {
           invitationId: validated.invitationId,

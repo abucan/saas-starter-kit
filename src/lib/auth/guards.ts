@@ -1,9 +1,12 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-import { bAuth } from './auth';
-import type { Session } from './auth';
+
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
+
+import type { Session } from './auth';
+import { auth } from './auth';
 
 type MemberWithRole = {
   id: string;
@@ -17,7 +20,7 @@ export async function requireAuth(): Promise<{
   userId: string;
   session: Session;
 }> {
-  const session = await bAuth.api.getSession({
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
 
@@ -36,7 +39,7 @@ export async function requireAuth(): Promise<{
 }
 
 export async function requireActiveMember(): Promise<MemberWithRole> {
-  const member = await bAuth.api.getActiveMember({
+  const member = await auth.api.getActiveMember({
     headers: await headers(),
   });
 

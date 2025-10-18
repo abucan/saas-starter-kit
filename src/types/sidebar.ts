@@ -1,4 +1,6 @@
+import { Entitlements } from '@/features/billing/types';
 import { Organization } from '@/lib/auth/auth';
+import { InvitationRow, MemberRow } from '@/types/auth';
 
 export type SidebarContext = {
   user: {
@@ -17,4 +19,7 @@ export type SidebarContext = {
     role: 'owner' | 'admin' | 'member';
   };
   teams: Organization[] | undefined;
+  members: MemberRow[];
+  invitations: InvitationRow[];
+  subscription: Entitlements;
 };

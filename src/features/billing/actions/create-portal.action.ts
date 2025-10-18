@@ -1,7 +1,7 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
+import { redirect } from 'next/navigation';
 
 import { requireUserId } from '@/lib/auth/session';
 import { handleError } from '@/lib/errors/error-handler';
@@ -9,15 +9,11 @@ import type { R } from '@/types/result';
 
 import { billingService } from '../services/billing.service';
 
-export async function resumeSubscriptionAction(): Promise<R> {
+export async function createPortalAction(): Promise<R<never>> {
   try {
     const userId = await requireUserId();
-
-    await billingService.resumeSubscription(userId);
-
-    revalidatePath('/account', 'layout');
-
-    return { ok: true };
+    const portalUrl = await billingService.createPortalSession(userId);
+    redirect(portalUrl as any);
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;

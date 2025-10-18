@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { bAuth } from '@/lib/auth/auth';
+import { auth } from '@/lib/auth/auth';
 
 export async function GET(
   request: Request,
@@ -10,7 +10,7 @@ export async function GET(
   const { id: invitationId } = await params;
 
   try {
-    await bAuth.api.acceptInvitation({
+    await auth.api.acceptInvitation({
       headers: await headers(),
       body: { invitationId },
     });

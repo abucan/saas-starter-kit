@@ -1,16 +1,19 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-import { bAuth } from './auth';
-import type { Organization } from './auth';
+
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
 import type { FullOrganization } from '@/types/auth'; // TODO: check if this is the correct type
+
+import type { Organization } from './auth';
+import { auth } from './auth';
 
 export async function setActiveOrganization(params: {
   organizationId?: string;
   organizationSlug?: string;
 }): Promise<void> {
-  await bAuth.api.setActiveOrganization({
+  await auth.api.setActiveOrganization({
     headers: await headers(),
     body: {
       organizationId: params.organizationId ?? null,
@@ -20,7 +23,7 @@ export async function setActiveOrganization(params: {
 }
 
 export async function getActiveOrgId(): Promise<string | null> {
-  const session = await bAuth.api.getSession({
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
   return session?.session?.activeOrganizationId ?? null;
@@ -35,7 +38,7 @@ export async function requireActiveOrgId(): Promise<string> {
 }
 
 export async function getActiveOrg(): Promise<FullOrganization | null> {
-  const organization = await bAuth.api.getFullOrganization({
+  const organization = await auth.api.getFullOrganization({
     headers: await headers(),
   });
   return organization as FullOrganization | null;
@@ -50,7 +53,7 @@ export async function requireActiveOrg(): Promise<FullOrganization> {
 }
 
 export async function listUserOrganizations(): Promise<Organization[]> {
-  const organizations = await bAuth.api.listOrganizations({
+  const organizations = await auth.api.listOrganizations({
     headers: await headers(),
   });
   return organizations ?? [];

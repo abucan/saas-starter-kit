@@ -4,10 +4,8 @@ import * as React from 'react';
 import { useState, useTransition } from 'react';
 import Image from 'next/image';
 import { ChevronsUpDown, Plus } from 'lucide-react';
+import { toast } from 'sonner';
 
-// import { AddTeamForm } from '@/app/(private)/team/components/AddTeamForm';
-// import { AddDialog } from '@/components/shared/AddDialog';
-// import { toastRes } from '@/components/toast-result';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,17 +20,20 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Organization } from '@/lib/auth/auth';
+import { Entitlements } from '@/features/billing/types';
 import { switchWorkspaceAction } from '@/features/workspace/actions/switch-workspace.action';
-import { toast } from 'sonner';
+import { Organization } from '@/lib/auth/auth';
+
 import { CreateWorkspaceDialog } from './create-workspace-dialog';
 
 export function SidebarTeamSwitcher({
   teams,
   orgId,
+  plan,
 }: {
   teams: Organization[];
   orgId: string | null;
+  plan: Entitlements['plan'];
 }) {
   const [pending, startTransition] = useTransition();
 
@@ -73,8 +74,9 @@ export function SidebarTeamSwitcher({
                     {activeTeam?.name}
                   </span>
                   <span className='truncate text-xs font-bricolage-grotesque'>
-                    {/* TODO: Add team subscription type */}
-                    Hobby
+                    {plan
+                      ? `${plan.charAt(0).toUpperCase()}${plan.slice(1)}`
+                      : 'Hobby'}
                   </span>
                 </div>
                 <ChevronsUpDown className='ml-auto' />

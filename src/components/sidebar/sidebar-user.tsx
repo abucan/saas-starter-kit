@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   BadgeCheck,
   Bell,
@@ -24,7 +25,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import Link from 'next/link';
 import { signOut } from '@/lib/auth/auth-client';
 import { SidebarContext } from '@/types/sidebar';
 

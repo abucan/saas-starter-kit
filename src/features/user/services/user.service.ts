@@ -2,7 +2,7 @@ import 'server-only';
 
 import { headers } from 'next/headers';
 
-import { bAuth } from '@/lib/auth/auth';
+import { auth } from '@/lib/auth/auth';
 
 import { updateProfileSchema } from '../schemas/user.schema';
 
@@ -18,14 +18,14 @@ export const userService = {
       payload.image = validated.image;
     }
 
-    await bAuth.api.updateUser({
+    await auth.api.updateUser({
       headers: await headers(),
       body: payload,
     });
   },
 
   async deleteProfile(): Promise<void> {
-    await bAuth.api.deleteUser({
+    await auth.api.deleteUser({
       headers: await headers(),
       body: {
         callbackURL: '/signin',

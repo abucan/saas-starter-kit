@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   Folder,
   Forward,
@@ -24,7 +25,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import Link from 'next/link';
 
 export function SidebarProjects({
   projects,
@@ -44,7 +44,7 @@ export function SidebarProjects({
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <Link href={item.url}>
+              <Link href={item.url as any}>
                 <item.icon />
                 <span>{item.name}</span>
               </Link>

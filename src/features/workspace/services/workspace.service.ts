@@ -1,22 +1,25 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-import { bAuth } from '@/lib/auth/auth';
+
 import type { Organization } from '@/lib/auth/auth';
-import {
-  createWorkspaceSchema,
-  updateWorkspaceSchema,
-  switchWorkspaceSchema,
-} from '../schemas/workspace.schema';
+import { auth } from '@/lib/auth/auth';
+import { isPersonalWorkspace } from '@/lib/auth/org-context';
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
-import { isPersonalWorkspace } from '@/lib/auth/org-context';
+
+import {
+  createWorkspaceSchema,
+  switchWorkspaceSchema,
+  updateWorkspaceSchema,
+} from '../schemas/workspace.schema';
 
 export const workspaceService = {
   async createWorkspace(input: unknown): Promise<{ id: string; slug: string }> {
     try {
       const validated = createWorkspaceSchema.parse(input);
 
-      const session = await bAuth.api.getSession({
+      const session = await auth.api.getSession({
         headers: await headers(),
       });
 
@@ -28,7 +31,7 @@ export const workspaceService = {
         );
       }
 
-      const slugCheck = await bAuth.api.checkOrganizationSlug({
+      const slugCheck = await auth.api.checkOrganizationSlug({
         body: {
           slug: validated.slug,
         },
@@ -42,7 +45,7 @@ export const workspaceService = {
         );
       }
 
-      const organization = await bAuth.api.createOrganization({
+      const organization = await auth.api.createOrganization({
         headers: await headers(),
         body: {
           name: validated.name,
@@ -93,7 +96,7 @@ export const workspaceService = {
     try {
       const validated = updateWorkspaceSchema.parse(input);
 
-      const org = await bAuth.api.getFullOrganization({
+      const org = await auth.api.getFullOrganization({
         headers: await headers(),
       });
 
@@ -111,7 +114,7 @@ export const workspaceService = {
       }
 
       if (validated.slug && validated.slug !== org.slug) {
-        const slugCheck = await bAuth.api.checkOrganizationSlug({
+        const slugCheck = await auth.api.checkOrganizationSlug({
           body: {
             slug: validated.slug,
           },
@@ -155,7 +158,7 @@ export const workspaceService = {
         };
       }
 
-      await bAuth.api.updateOrganization({
+      await auth.api.updateOrganization({
         headers: await headers(),
         body: {
           organizationId: org.id,
@@ -186,7 +189,7 @@ export const workspaceService = {
 
   async deleteWorkspace(): Promise<void> {
     try {
-      const org = await bAuth.api.getFullOrganization({
+      const org = await auth.api.getFullOrganization({
         headers: await headers(),
       });
 
@@ -203,7 +206,7 @@ export const workspaceService = {
         );
       }
 
-      const session = await bAuth.api.getSession({
+      const session = await auth.api.getSession({
         headers: await headers(),
       });
 
@@ -235,7 +238,7 @@ export const workspaceService = {
         );
       }
 
-      await bAuth.api.deleteOrganization({
+      await auth.api.deleteOrganization({
         headers: await headers(),
         body: {
           organizationId: org.id,
@@ -243,7 +246,7 @@ export const workspaceService = {
       });
 
       const personalSlug = `pw-${session.user.id}`;
-      const organizations = await bAuth.api.listOrganizations({
+      const organizations = await auth.api.listOrganizations({
         headers: await headers(),
       });
 
@@ -254,14 +257,14 @@ export const workspaceService = {
       });
 
       if (personalWorkspace?.id) {
-        await bAuth.api.setActiveOrganization({
+        await auth.api.setActiveOrganization({
           headers: await headers(),
           body: {
             organizationId: personalWorkspace.id,
           },
         });
       } else {
-        await bAuth.api.setActiveOrganization({
+        await auth.api.setActiveOrganization({
           headers: await headers(),
           body: {
             organizationSlug: personalSlug,
@@ -294,7 +297,7 @@ export const workspaceService = {
     try {
       const validated = switchWorkspaceSchema.parse(input);
 
-      const organizations = await bAuth.api.listOrganizations({
+      const organizations = await auth.api.listOrganizations({
         headers: await headers(),
       });
 
@@ -318,7 +321,7 @@ export const workspaceService = {
         );
       }
 
-      await bAuth.api.setActiveOrganization({
+      await auth.api.setActiveOrganization({
         body: {
           organizationId: validated.workspaceId,
         },

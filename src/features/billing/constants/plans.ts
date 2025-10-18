@@ -10,12 +10,7 @@ export const plans: BasePlan[] = [
     },
     description:
       'The perfect starting place for your web app or personal project.',
-    features: [
-      '2 Workspaces',
-      '10 Projects',
-      'Unlimited Environments',
-      '100 Secrets',
-    ],
+    features: ['2 Workspaces'],
     cta: 'Subscribe to Starter',
     popular: true,
   },
@@ -28,12 +23,7 @@ export const plans: BasePlan[] = [
     },
     description:
       'For personal projects or small teams looking for additional features.',
-    features: [
-      'Unlimited Workspaces',
-      'Unlimited Projects',
-      'Unlimited Environments',
-      'Unlimited Secrets',
-    ],
+    features: ['5 Workspaces'],
     cta: 'Subscribe to Pro',
   },
 ];

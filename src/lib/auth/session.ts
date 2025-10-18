@@ -1,12 +1,15 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-import { bAuth } from './auth';
-import type { Session, User } from './auth';
+
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
 
+import type { Session, User } from './auth';
+import { auth } from './auth';
+
 export async function getSession(): Promise<Session | null> {
-  const session = await bAuth.api.getSession({
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
   return session ?? null;

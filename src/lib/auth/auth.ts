@@ -1,11 +1,11 @@
-import 'server-only';
-
 import { headers } from 'next/headers';
+import { stripe } from '@better-auth/stripe';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
 import { emailOTP, organization } from 'better-auth/plugins';
 import { eq } from 'drizzle-orm';
+import Stripe from 'stripe';
 
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schemas/auth.schema';
@@ -23,7 +23,11 @@ import {
   OTP_LENGTH,
 } from '../utils';
 
-export const bAuth = betterAuth({
+const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-08-27.basil',
+});
+
+export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'sqlite',
     schema,
@@ -74,20 +78,48 @@ export const bAuth = betterAuth({
       organizationDeletion: {
         afterDelete: async ({ user }) => {
           const personalSlug = `pw-${user.id}`;
-          const personalOrg = await bAuth.api.checkOrganizationSlug({
+          const personalOrg = await auth.api.checkOrganizationSlug({
             body: {
               slug: personalSlug,
             },
           });
 
           if (personalOrg) {
-            await bAuth.api.setActiveOrganization({
+            await auth.api.setActiveOrganization({
               body: {
                 organizationSlug: personalSlug,
               },
             });
           }
         },
+      },
+    }),
+    stripe({
+      stripeClient,
+      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+      createCustomerOnSignUp: true,
+      subscription: {
+        enabled: true,
+        plans: [
+          {
+            name: 'starter',
+            priceId: process.env.STRIPE_PRICE_STARTER_MONTHLY!,
+            annualDiscountPriceId: process.env.STRIPE_PRICE_STARTER_YEARLY!,
+            limits: {
+              workspaces: 2,
+            },
+            group: 'paid',
+          },
+          {
+            name: 'pro',
+            priceId: process.env.STRIPE_PRICE_PRO_MONTHLY!,
+            annualDiscountPriceId: process.env.STRIPE_PRICE_PRO_YEARLY!,
+            limits: {
+              workspaces: 5,
+            },
+            group: 'paid',
+          },
+        ],
       },
     }),
     nextCookies(),
@@ -127,7 +159,7 @@ export const bAuth = betterAuth({
               });
 
               if (!existing?.id || !existing?.slug) {
-                await bAuth.api.createOrganization({
+                await auth.api.createOrganization({
                   body: {
                     name: 'Personal Workspace',
                     slug,
@@ -167,21 +199,21 @@ export const bAuth = betterAuth({
         });
       },
       beforeDelete: async (user) => {
-        const organizations = await bAuth.api.listOrganizations({
+        const organizations = await auth.api.listOrganizations({
           headers: await headers(),
           query: { userId: user.id },
         });
 
         for (const org of organizations) {
           if (isPersonalOrganization(org as { metadata: unknown })) {
-            await bAuth.api.deleteOrganization({
+            await auth.api.deleteOrganization({
               headers: await headers(),
               body: { organizationId: org.id },
             });
             continue;
           }
 
-          const members = await bAuth.api.listMembers({
+          const members = await auth.api.listMembers({
             headers: await headers(),
             query: { organizationId: org.id },
           });
@@ -199,7 +231,7 @@ export const bAuth = betterAuth({
   },
 });
 
-export type Session = typeof bAuth.$Infer.Session;
-export type User = typeof bAuth.$Infer.Session.user;
-export type Organization = typeof bAuth.$Infer.Organization;
-export type Member = typeof bAuth.$Infer.Member;
+export type Session = typeof auth.$Infer.Session;
+export type User = typeof auth.$Infer.Session.user;
+export type Organization = typeof auth.$Infer.Organization;
+export type Member = typeof auth.$Infer.Member;

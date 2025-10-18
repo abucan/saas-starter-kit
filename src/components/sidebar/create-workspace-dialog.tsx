@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -25,11 +26,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { createWorkspaceAction } from '@/features/workspace/actions';
 import {
-  createWorkspaceSchema,
   type CreateWorkspaceInput,
+  createWorkspaceSchema,
 } from '@/features/workspace/schemas/workspace.schema';
 
 type CreateWorkspaceDialogProps = {
@@ -52,7 +52,6 @@ export function CreateWorkspaceDialog({
     },
   });
 
-  // Auto-generate slug from name
   const watchName = form.watch('name');
   useEffect(() => {
     if (watchName && !form.formState.dirtyFields.slug) {
@@ -80,7 +79,6 @@ export function CreateWorkspaceDialog({
         const errorMessage = getErrorMessage(result.code, result.message);
         toast.error(errorMessage);
 
-        // Set field-specific errors
         if (
           result.code === 'WORKSPACE_SLUG_TAKEN' ||
           result.code === 'ALREADY_EXISTS'
@@ -114,7 +112,6 @@ export function CreateWorkspaceDialog({
     );
   }
 
-  // Reset form when dialog closes
   useEffect(() => {
     if (!open) {
       form.reset();

@@ -2,7 +2,7 @@ import 'server-only';
 
 import { headers } from 'next/headers';
 
-import { bAuth } from '@/lib/auth/auth';
+import { auth } from '@/lib/auth/auth';
 
 import {
   type ResendOtpInput,
@@ -17,7 +17,7 @@ export const authService = {
   async sendSignInOtp(input: SignInWithEmailInput): Promise<void> {
     const validated = signInWithEmailSchema.parse(input);
 
-    await bAuth.api.sendVerificationOTP({
+    await auth.api.sendVerificationOTP({
       headers: await headers(),
       body: {
         email: validated.email,
@@ -29,7 +29,7 @@ export const authService = {
   async verifySignInOtp(input: VerifyOtpInput): Promise<void> {
     const validated = verifyOtpSchema.parse(input);
 
-    await bAuth.api.signInEmailOTP({
+    await auth.api.signInEmailOTP({
       headers: await headers(),
       body: {
         email: validated.email,
@@ -41,7 +41,7 @@ export const authService = {
   async resendSignInOtp(input: ResendOtpInput): Promise<void> {
     const validated = resendOtpSchema.parse(input);
 
-    await bAuth.api.sendVerificationOTP({
+    await auth.api.sendVerificationOTP({
       headers: await headers(),
       body: {
         email: validated.email,

@@ -1,9 +1,12 @@
 import 'server-only';
+
 import { headers } from 'next/headers';
-import { bAuth } from '@/lib/auth/auth';
+
+import { auth } from '@/lib/auth/auth';
 import { requireActiveMember } from '@/lib/auth/guards';
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
+
 import type { Role } from '../types';
 
 export async function canEditWorkspace(): Promise<boolean> {
@@ -18,7 +21,7 @@ export async function canEditWorkspace(): Promise<boolean> {
 export async function canDeleteWorkspace(): Promise<boolean> {
   try {
     const member = await requireActiveMember();
-    const org = await bAuth.api.getFullOrganization({
+    const org = await auth.api.getFullOrganization({
       headers: await headers(),
     });
 
@@ -43,7 +46,7 @@ export async function canDeleteWorkspace(): Promise<boolean> {
 }
 
 export async function ensureNotPersonalWorkspace(): Promise<void> {
-  const org = await bAuth.api.getFullOrganization({
+  const org = await auth.api.getFullOrganization({
     headers: await headers(),
   });
 
@@ -67,7 +70,7 @@ export async function ensureSlugAvailable(
   slug: string,
   currentOrgId?: string
 ): Promise<void> {
-  const existingOrg = await bAuth.api.getFullOrganization({
+  const existingOrg = await auth.api.getFullOrganization({
     headers: await headers(),
     query: { organizationSlug: slug },
   });
@@ -88,7 +91,7 @@ export async function getWorkspacePermissions(): Promise<{
   role: Role;
 }> {
   const member = await requireActiveMember();
-  const org = await bAuth.api.getFullOrganization({
+  const org = await auth.api.getFullOrganization({
     headers: await headers(),
   });
 

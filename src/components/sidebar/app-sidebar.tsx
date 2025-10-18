@@ -5,8 +5,8 @@ import { BookOpen, Key } from 'lucide-react';
 
 import { SidebarMain } from '@/components/sidebar/sidebar-main';
 import { SidebarProjects } from '@/components/sidebar/sidebar-projects';
-import { SidebarUser } from '@/components/sidebar/sidebar-user';
 import { SidebarTeamSwitcher } from '@/components/sidebar/sidebar-team-switcher';
+import { SidebarUser } from '@/components/sidebar/sidebar-user';
 import {
   Sidebar,
   SidebarContent,
@@ -32,7 +32,11 @@ export function AppSidebar({
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
-        <SidebarTeamSwitcher teams={ctx?.teams ?? []} orgId={ctx.org.id} />
+        <SidebarTeamSwitcher
+          teams={ctx?.teams ?? []}
+          orgId={ctx.org.id}
+          plan={ctx.subscription.plan}
+        />
       </SidebarHeader>
       <SidebarContent>
         <SidebarMain items={data.navMain} />

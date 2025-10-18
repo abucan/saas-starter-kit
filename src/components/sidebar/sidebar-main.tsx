@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
 
@@ -18,7 +19,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import Link from 'next/link';
 
 export function SidebarMain({
   items,
@@ -73,7 +73,7 @@ export function SidebarMain({
                             asChild
                             isActive={pathname === subItem.url}
                           >
-                            <Link href={subItem.url}>
+                            <Link href={subItem.url as any}>
                               <span>{subItem.title}</span>
                             </Link>
                           </SidebarMenuSubButton>
@@ -93,7 +93,7 @@ export function SidebarMain({
                 tooltip={item.title}
                 isActive={isActive}
               >
-                <Link href={item.url}>
+                <Link href={item.url as any}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>

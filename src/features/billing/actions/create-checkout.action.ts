@@ -1,10 +1,13 @@
 'use server';
 
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { redirect } from 'next/navigation';
-import { billingService } from '../services/billing.service';
+
 import { requireUser } from '@/lib/auth/session';
 import { handleError } from '@/lib/errors/error-handler';
 import type { R } from '@/types/result';
+
+import { billingService } from '../services/billing.service';
 
 export async function createCheckoutAction(input: unknown): Promise<R<never>> {
   try {
@@ -17,9 +20,11 @@ export async function createCheckoutAction(input: unknown): Promise<R<never>> {
       user.name
     );
 
-    // Redirect to Stripe Checkout
-    redirect(checkoutUrl);
+    redirect(checkoutUrl as any);
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     return handleError(error) as R<never>;
   }
 }

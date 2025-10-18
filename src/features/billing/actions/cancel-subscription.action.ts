@@ -1,21 +1,25 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { billingService } from '../services/billing.service';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
+import { redirect } from 'next/navigation';
+
 import { requireUserId } from '@/lib/auth/session';
 import { handleError } from '@/lib/errors/error-handler';
 import type { R } from '@/types/result';
 
-export async function cancelSubscriptionAction(): Promise<R> {
+import { billingService } from '../services/billing.service';
+
+export async function cancelSubscriptionAction(): Promise<R<never>> {
   try {
     const userId = await requireUserId();
 
-    await billingService.cancelSubscription(userId);
+    const portalUrl = await billingService.cancelSubscription(userId);
 
-    revalidatePath('/account', 'layout');
-
-    return { ok: true };
+    redirect(portalUrl as any);
   } catch (error) {
-    return handleError(error);
+    if (isRedirectError(error)) {
+      throw error;
+    }
+    return handleError(error) as R<never>;
   }
 }
