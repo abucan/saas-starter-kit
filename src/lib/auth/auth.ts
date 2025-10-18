@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { headers } from 'next/headers';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
@@ -10,16 +11,23 @@ import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schemas/auth.schema';
 import { AppError, ERROR_CODES } from '@/lib/errors';
 
-import { sendOTPEmail, sendWorkspaceInviteEmail } from '../email/service';
-import { OTP_EXPIRY_SECONDS, OTP_LENGTH } from '../utils';
-// import { cookies } from 'next/headers';
+import {
+  sendDeleteAccountVerification,
+  sendOTPEmail,
+  sendWorkspaceInviteEmail,
+} from '../email/service';
+import {
+  isPersonalOrganization,
+  isSoleOwner,
+  OTP_EXPIRY_SECONDS,
+  OTP_LENGTH,
+} from '../utils';
 
 export const bAuth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'sqlite',
     schema,
   }),
-
   session: {
     cookieCache: {
       enabled: true,
@@ -27,11 +35,9 @@ export const bAuth = betterAuth({
     },
     expiresIn: 60 * 60 * 24 * 7,
   },
-
   emailAndPassword: {
     enabled: false,
   },
-
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID!,
@@ -44,7 +50,6 @@ export const bAuth = betterAuth({
       prompt: 'select_account consent',
     },
   },
-
   plugins: [
     emailOTP({
       otpLength: OTP_LENGTH,
@@ -55,7 +60,6 @@ export const bAuth = betterAuth({
         await sendOTPEmail({ email, otp, type: 'sign-in' });
       },
     }),
-
     organization({
       requireEmailVerificationOnInvitation: true,
       sendInvitationEmail: async ({ invitation, organization, inviter }) => {
@@ -86,10 +90,8 @@ export const bAuth = betterAuth({
         },
       },
     }),
-
     nextCookies(),
   ],
-
   databaseHooks: {
     session: {
       create: {
@@ -110,7 +112,6 @@ export const bAuth = betterAuth({
         },
       },
     },
-
     user: {
       create: {
         after: async (user) => {
@@ -158,25 +159,34 @@ export const bAuth = betterAuth({
   user: {
     deleteUser: {
       enabled: true,
+      sendDeleteAccountVerification: async ({ user, token, url }) => {
+        await sendDeleteAccountVerification({
+          user,
+          url,
+          token,
+        });
+      },
       beforeDelete: async (user) => {
         const organizations = await bAuth.api.listOrganizations({
-          query: {
-            userId: user.id,
-          },
+          headers: await headers(),
+          query: { userId: user.id },
         });
 
         for (const org of organizations) {
-          const metadata = org.metadata as { isPersonal?: boolean } | null;
-          if (metadata?.isPersonal) continue;
+          if (isPersonalOrganization(org as { metadata: unknown })) {
+            await bAuth.api.deleteOrganization({
+              headers: await headers(),
+              body: { organizationId: org.id },
+            });
+            continue;
+          }
 
           const members = await bAuth.api.listMembers({
-            query: {
-              organizationId: org.id,
-            },
+            headers: await headers(),
+            query: { organizationId: org.id },
           });
-          const owners = members.members.filter((m) => m.role === 'owner');
 
-          if (owners.length === 1 && owners[0]?.userId === user.id) {
+          if (isSoleOwner(members.members, user.id)) {
             throw new AppError(
               ERROR_CODES.FORBIDDEN,
               `Cannot delete account. You are the only owner of "${org.name}". Transfer ownership or delete the organization first.`,
@@ -184,16 +194,6 @@ export const bAuth = betterAuth({
             );
           }
         }
-      },
-      afterDelete: async ({}) => {
-        // TODO: Enable this later if needed
-        /*
-        try {
-          ;(await cookies()).delete(SESSION_COOKIE_NAME)
-        } catch (error: unknown) {
-          console.error('Error during post-delete cleanup:', error)
-        }
-        */
       },
     },
   },

@@ -3,9 +3,9 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -28,9 +28,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { type UpdateProfileInput, updateProfileSchema } from '@/features/user';
+import { updateProfileAction } from '@/features/user/actions/update-profile.action';
 import { useUploadThing } from '@/lib/utils/uploadthing';
-import { updateProfileAction } from '@/features/user/actions';
-import { updateProfileSchema, type UpdateProfileInput } from '@/features/user';
 
 type ProfileFormProps = {
   user: {
@@ -86,9 +86,17 @@ export function ProfileForm({ user }: ProfileFormProps) {
       });
 
       toast.success('Avatar uploaded successfully');
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (error) {
       console.error('Avatar upload error:', error);
       toast.error('Failed to upload avatar. Please try again.');
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -150,7 +158,10 @@ export function ProfileForm({ user }: ProfileFormProps) {
           <CardContent className='space-y-6'>
             <div className='flex items-center gap-4'>
               <Avatar className='size-20'>
-                <AvatarImage src={currentImage ?? undefined} alt={user.name} />
+                <AvatarImage
+                  src={currentImage ?? '/avatars/shadcn.jfif'}
+                  alt={user.name}
+                />
                 <AvatarFallback className='text-lg'>
                   {getUserInitials(user.name)}
                 </AvatarFallback>

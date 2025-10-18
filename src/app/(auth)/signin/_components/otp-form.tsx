@@ -51,7 +51,7 @@ export function OTPForm({
     if (result.ok) {
       form.setValue('otp', '');
       form.clearErrors('otp');
-      toast.success('A new code has been sent to your email.');
+      toast.success('A new code has been sent to your email');
       startCountdown();
     } else {
       form.setError('otp', { message: 'Failed to resend code' });
@@ -120,8 +120,8 @@ export function OTPForm({
             {resending
               ? 'Sending...'
               : canResend
-              ? 'Resend code'
-              : `Resend code (${formattedTime})`}
+                ? 'Resend code'
+                : `Resend code (${formattedTime})`}
           </Button>
         </div>
       </div>

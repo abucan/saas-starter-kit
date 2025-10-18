@@ -1,20 +1,29 @@
 import { ZodError } from 'zod';
-import { AppError } from './app-error';
+
 import { R } from '@/types/result';
+
+import { AppError } from './app-error';
 import { ERROR_CODES } from './error-codes';
 
 type BetterAuthError = {
   body?: { code?: string; message?: string };
-  status?: number;
+  status?: string;
+  statusCode?: number;
   message?: string;
 };
 
 function isBetterAuthError(error: unknown): error is BetterAuthError {
+  if (typeof error !== 'object' || error === null) {
+    return false;
+  }
+
+  const err = error as Record<string, unknown>;
+
   return (
-    typeof error === 'object' &&
-    error !== null &&
-    'body' in error &&
-    typeof (error as BetterAuthError).body === 'object'
+    ('statusCode' in err && typeof err.statusCode === 'number') ||
+    ('status' in err &&
+      (typeof err.status === 'string' || typeof err.status === 'number')) ||
+    'body' in err
   );
 }
 
@@ -52,10 +61,31 @@ export function handleError(error: unknown): R {
         message: betterAuthError.body.message || 'Authentication error',
       };
     }
+
+    if (
+      betterAuthError.status === 'UNAUTHORIZED' ||
+      betterAuthError.statusCode === 401
+    ) {
+      return {
+        ok: false,
+        code: ERROR_CODES.UNAUTHORIZED,
+        message: 'You must be signed in to perform this action',
+      };
+    }
+
+    if (betterAuthError.statusCode) {
+      return {
+        ok: false,
+        code: ERROR_CODES.INTERNAL_ERROR,
+        message:
+          betterAuthError.message ||
+          `Authentication error (${betterAuthError.statusCode})`,
+      };
+    }
   }
 
   if (error instanceof Error) {
-    console.error('❌ Unhandled error:', error);
+    console.error('❌ Unhandled error 1:', error);
     return {
       ok: false,
       code: ERROR_CODES.INTERNAL_ERROR,
@@ -63,7 +93,7 @@ export function handleError(error: unknown): R {
     };
   }
 
-  console.error('❌ Unhandled error:', error);
+  console.error('❌ Unhandled error 2:', error);
   return {
     ok: false,
     code: ERROR_CODES.UNKNOWN_ERROR,

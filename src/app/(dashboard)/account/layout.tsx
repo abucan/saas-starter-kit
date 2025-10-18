@@ -7,13 +7,8 @@ export default function AccountLayout({
 }) {
   return (
     <div className='flex flex-col gap-8'>
-      <div className='flex flex-col gap-1'>
-        <h1 className='text-2xl font-bold font-bricolage-grotesque'>Account</h1>
-        <p className='text-base text-muted-foreground font-bricolage-grotesque'>
-          Manage your personal account settings and preferences.
-        </p>
-      </div>
-      <div className='flex flex-row gap-10'>
+      <h1 className='text-2xl font-bold'>Account</h1>
+      <div className='flex flex-row gap-8'>
         <AccountNav />
         <div className='flex flex-1'>{children}</div>
       </div>

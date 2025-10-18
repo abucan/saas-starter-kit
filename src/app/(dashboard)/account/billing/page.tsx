@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
+
 import { getDashboardContext } from '@/lib/auth/get-dashboard-context';
+
 import { CurrentPlanCard } from './_components/current-plan-card';
-import { PricingTables } from './_components/pricing-tables';
 import { ManageBillingCard } from './_components/manage-billing-card';
+import { PricingTables } from './_components/pricing-tables';
 
 export const metadata: Metadata = {
   title: 'Billing | Keyvaultify',
-  description: 'Manage your billing and subscription.',
+  description: 'Manage your billing information and subscriptions',
 };
 
 export default async function BillingPage() {

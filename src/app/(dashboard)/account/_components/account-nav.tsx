@@ -2,48 +2,28 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CreditCard, Shield, User } from 'lucide-react';
-import { Card } from '@/components/ui/card';
 
-const settings = [
-  {
-    title: 'Profile',
-    description: 'Manage your account settings and preferences.',
-    href: '/account/profile',
-    icon: User,
-  },
-  {
-    title: 'Billing',
-    description: 'Manage your billing information and subscriptions.',
-    href: '/account/billing',
-    icon: CreditCard,
-  },
-  {
-    title: 'Security',
-    description: 'Manage security settings and delete your account.',
-    href: '/account/security',
-    icon: Shield,
-  },
-];
+import { Card } from '@/components/ui/card';
+import { accountNavConfig } from '@/config/account';
 
 export function AccountNav() {
   const pathname = usePathname();
 
   return (
-    <Card className='py-2 px-2 h-52'>
-      <div className='flex flex-col justify-between h-full'>
-        {settings.map((setting) => (
+    <Card className='py-2 px-2 self-start'>
+      <div className='flex flex-col gap-2'>
+        {accountNavConfig.map((nav) => (
           <Link
-            href={setting.href}
-            key={setting.title}
+            href={nav.href as any}
+            key={nav.title}
             className={`${
-              pathname === setting.href ? 'bg-primary/10' : 'hover:bg-muted'
+              pathname === nav.href ? 'bg-primary/10' : 'hover:bg-muted'
             } py-2.5 pl-2 pr-10 rounded-xl transition-colors`}
           >
             <div className='flex flex-row items-center gap-2'>
-              <setting.icon
+              <nav.icon
                 className={`${
-                  pathname === setting.href
+                  pathname === nav.href
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground bg-muted'
                 } p-1.5 rounded-md mr-1`}
@@ -53,21 +33,21 @@ export function AccountNav() {
               <div className='flex flex-col'>
                 <p
                   className={`text-base font-bold font-bricolage-grotesque ${
-                    pathname === setting.href
+                    pathname === nav.href
                       ? 'text-primary-foreground'
                       : 'text-muted-foreground'
                   }`}
                 >
-                  {setting.title}
+                  {nav.title}
                 </p>
                 <p
                   className={`text-xs font-bricolage-grotesque ${
-                    pathname === setting.href
+                    pathname === nav.href
                       ? 'text-primary-foreground'
                       : 'text-muted-foreground'
                   }`}
                 >
-                  {setting.description}
+                  {nav.description}
                 </p>
               </div>
             </div>

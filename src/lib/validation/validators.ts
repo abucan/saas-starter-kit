@@ -45,3 +45,28 @@ export function isValidPhoneNumber(phone: string): boolean {
   const phoneRegex = /^\+?[0-9]{10,15}$/;
   return phoneRegex.test(cleanedPhone);
 }
+
+const parseMetadata = (metadata: unknown) => {
+  if (typeof metadata === 'string') {
+    try {
+      return JSON.parse(metadata);
+    } catch {
+      return null;
+    }
+  }
+  return metadata;
+};
+
+export const isPersonalOrganization = (org: { metadata: unknown }) => {
+  const metadata = parseMetadata(org.metadata);
+  const isPersonalValue = metadata?.isPersonal;
+  return isPersonalValue === true || isPersonalValue === 'true';
+};
+
+export const isSoleOwner = (
+  members: Array<{ role: string; userId?: string }>,
+  userId: string
+) => {
+  const owners = members.filter((m) => m.role === 'owner');
+  return owners.length === 1 && owners[0]?.userId === userId;
+};

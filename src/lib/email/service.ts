@@ -3,11 +3,21 @@ import { render } from '@react-email/render';
 import type { CreateEmailResponse } from 'resend';
 
 import { OtpType } from '@/features/auth/types';
-import { OTPEmail, WorkspaceInviteEmail } from '@/lib/email/templates';
+import {
+  DeleteUserEmail,
+  OTPEmail,
+  WorkspaceInviteEmail,
+} from '@/lib/email/templates';
 
 import { isValidEmail } from '../validation';
 
 import { EMAIL_CONFIG, resend } from './client';
+
+export interface User {
+  id: string;
+  email: string;
+  name?: string;
+}
 
 export interface SendOTPParams {
   email: string;
@@ -20,6 +30,12 @@ export interface SendWorkspaceInviteParams {
   teamName: string;
   acceptUrl: string;
   inviterName?: string;
+}
+
+export interface SendDeleteAccountParams {
+  user: User;
+  url: string;
+  token: string;
 }
 
 const OTP_SUBJECTS: Record<OtpType, string> = {
@@ -115,6 +131,49 @@ export async function sendWorkspaceInviteEmail(
       error instanceof Error
         ? error.message
         : 'Failed to send invitation. Please try again.'
+    );
+  }
+}
+
+export async function sendDeleteAccountVerification(
+  params: SendDeleteAccountParams
+): Promise<void> {
+  const { user, url } = params;
+
+  if (!isValidEmail(user.email)) {
+    throw new Error('Invalid email address');
+  }
+
+  try {
+    const emailHtml = await render(
+      React.createElement(DeleteUserEmail, {
+        userName: user.name,
+        email: user.email,
+        verifyUrl: url,
+      })
+    );
+
+    const result = await resend.emails.send({
+      from: EMAIL_CONFIG.from,
+      to: user.email,
+      subject: 'Confirm account deletion - KeyVaultify',
+      html: emailHtml,
+      text:
+        `We received a request to delete your KeyVaultify account (${user.email}).\n\n` +
+        `To confirm this action, visit: ${url}\n\n` +
+        `WARNING: This action is permanent and cannot be undone. All your data will be deleted.\n\n` +
+        `If you didn't request this, please ignore this email. Your account will remain active.`,
+    });
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+  } catch (error) {
+    console.error('Failed to send delete account verification email:', error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : 'Failed to send verification email. Please try again.'
     );
   }
 }

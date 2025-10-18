@@ -4,7 +4,11 @@ import { betterFetch } from '@better-fetch/fetch';
 import type { Session } from '@/lib/auth/auth';
 
 const PUBLIC_ROUTES = ['/', '/signin', '/signup'];
-const PUBLIC_ROUTE_PREFIXES = ['/api/auth', '/accept-invitation'];
+const PUBLIC_ROUTE_PREFIXES = [
+  '/api/auth',
+  '/accept-invitation',
+  '/api/uploadthing',
+];
 const STATIC_ASSETS = ['/_next', '/favicon.ico', '/images', '/fonts'];
 
 export async function middleware(request: NextRequest) {
