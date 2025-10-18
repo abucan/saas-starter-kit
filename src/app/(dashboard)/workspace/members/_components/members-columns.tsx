@@ -1,8 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
+import { ColumnDef } from '@tanstack/react-table';
+
 import { MemberRow } from '@/types/auth';
-import { RoleCell } from './role-cell';
+
 import { MemberActionsCell } from './members-actions-cell';
+import { RoleCell } from './role-cell';
 
 export const membersColumns: ColumnDef<MemberRow>[] = [
   // Avatar + Name + Email column

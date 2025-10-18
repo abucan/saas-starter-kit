@@ -57,7 +57,7 @@ export function ManageBillingCard({
   const isPending = isCanceling || isResuming || isOpeningPortal;
 
   return (
-    <Card className='py-4 bg-muted w-full'>
+    <Card className='py-4 bg-muted max-w-2xl w-full'>
       <CardHeader className='flex flex-row items-center justify-between gap-4'>
         <div className='flex flex-col gap-0.5'>
           <CardTitle className='text-sm font-bold'>Manage Billing</CardTitle>

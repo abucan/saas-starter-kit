@@ -1,5 +1,7 @@
-import { getDashboardContext } from '@/lib/auth/get-dashboard-context';
 import { Metadata } from 'next';
+
+import { getDashboardContext } from '@/lib/auth/get-dashboard-context';
+
 import { MembersTable } from './_components/members-table';
 
 export const metadata: Metadata = {
@@ -9,16 +11,11 @@ export const metadata: Metadata = {
 
 export default async function MembersPage() {
   const { members, user, org, membership } = await getDashboardContext();
+
   return (
-    <div className='flex flex-col gap-6'>
-      <div className='flex flex-col gap-1'>
-        <h2 className='text-xl font-bold font-bricolage-grotesque'>Members</h2>
-        <p className='text-sm text-muted-foreground font-bricolage-grotesque'>
-          Manage your workspace members and their roles.
-        </p>
-      </div>
+    <div className='flex-1'>
       <MembersTable
-        members={members}
+        members={members ?? []}
         currentUserId={user.id}
         isPersonalWorkspace={org.isPersonal}
         defaultRole={org.defaultRole}

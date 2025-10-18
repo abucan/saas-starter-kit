@@ -2,15 +2,29 @@
 
 import { useState } from 'react';
 import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
   type ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
 } from '@tanstack/react-table';
 import { Plus, Users } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
 import {
   Table,
   TableBody,
@@ -25,25 +39,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/empty';
 import type { MemberRow, Role } from '@/types/auth';
-import { membersColumns } from './members-columns';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { AddMemberForm } from './add-member-form';
+import { membersColumns } from './members-columns';
 
 type MembersTableProps = {
   members: MemberRow[];
@@ -62,12 +61,10 @@ export function MembersTable({
 }: MembersTableProps) {
   const [addMemberDialogOpen, setAddMemberDialogOpen] = useState(false);
 
-  // Permission check: Only admins and owners can add members, and not in personal workspaces
   const canAddMembers =
     !isPersonalWorkspace &&
     (currentUserRole === 'owner' || currentUserRole === 'admin');
 
-  // Determine tooltip message for disabled button
   const getDisabledReason = (): string => {
     if (isPersonalWorkspace) {
       return 'Cannot add members to personal workspace';
@@ -78,7 +75,6 @@ export function MembersTable({
     return 'You do not have permission to add members';
   };
 
-  // Initialize TanStack Table
   const table = useReactTable({
     data: members,
     columns: membersColumns,
@@ -86,8 +82,8 @@ export function MembersTable({
   });
 
   return (
-    <div className='flex flex-col gap-4 w-full'>
-      {/* Add Member Button */}
+    <div className='flex flex-col gap-4 max-w-2xl w-full'>
+      {/* TODO: Add Member Button */}
       <Dialog open={addMemberDialogOpen} onOpenChange={setAddMemberDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -125,7 +121,6 @@ export function MembersTable({
         </Tooltip>
       </TooltipProvider>
 
-      {/* Members Table */}
       <Card className='overflow-hidden rounded-lg border p-0 w-full'>
         <Table>
           <TableHeader>
@@ -185,16 +180,6 @@ export function MembersTable({
           </TableBody>
         </Table>
       </Card>
-
-      {/* TODO: Add Member Dialog - Implement in Phase 8 (Invitations) */}
-      {/* <Dialog open={addMemberDialogOpen} onOpenChange={setAddMemberDialogOpen}>
-        <DialogContent>
-          <AddMemberForm
-            defaultRole={defaultRole}
-            onSuccess={() => setAddMemberDialogOpen(false)}
-          />
-        </DialogContent>
-      </Dialog> */}
     </div>
   );
 }

@@ -1,13 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { LogOut, UserMinus, Loader2 } from 'lucide-react';
+import { Loader2, LogOut, UserMinus } from 'lucide-react';
 import { toast } from 'sonner';
-import type { MemberRow } from '@/types/auth';
-import {
-  removeMemberAction,
-  leaveWorkspaceAction,
-} from '@/features/workspace/members/actions';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -22,6 +18,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  leaveWorkspaceAction,
+  removeMemberAction,
+} from '@/features/workspace/members/actions';
+import type { MemberRow } from '@/types/auth';
 
 type MemberActionsCellProps = {
   member: MemberRow;

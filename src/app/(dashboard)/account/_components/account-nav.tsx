@@ -32,7 +32,7 @@ export function AccountNav() {
               />
               <div className='flex flex-col'>
                 <p
-                  className={`text-base font-bold font-bricolage-grotesque ${
+                  className={`text-base font-bold ${
                     pathname === nav.href
                       ? 'text-primary-foreground'
                       : 'text-muted-foreground'
@@ -41,7 +41,7 @@ export function AccountNav() {
                   {nav.title}
                 </p>
                 <p
-                  className={`text-xs font-bricolage-grotesque ${
+                  className={`text-xs ${
                     pathname === nav.href
                       ? 'text-primary-foreground'
                       : 'text-muted-foreground'

@@ -18,7 +18,7 @@ export function CurrentPlanCard({
     : 'Free';
 
   return (
-    <Card className='py-4 bg-muted w-full'>
+    <Card className='py-4 bg-muted max-w-2xl w-full'>
       <CardHeader className='flex flex-row items-center gap-4'>
         <CreditCard className='p-2 bg-white rounded-lg' size={40} />
         <div>

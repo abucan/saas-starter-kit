@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { R } from '@/types/result';
+
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -12,13 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import type { R } from '@/types/result';
 
 type DangerZoneCardProps = {
   /** Title of the danger zone card */
@@ -110,7 +111,7 @@ export function DangerZoneCard({
   );
 
   return (
-    <Card className='border-destructive/50'>
+    <Card className='border-destructive/50 max-w-2xl w-full'>
       <CardHeader className='gap-0'>
         <CardTitle className='text-base font-bold font-bricolage-grotesque text-destructive'>
           {title}

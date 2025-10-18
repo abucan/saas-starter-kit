@@ -1,6 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { InvitationRow } from '@/types/auth';
+
 import { Badge } from '@/components/ui/badge';
+import { InvitationRow } from '@/types/auth';
+
 import { CopyLinkButton } from './copy-link-button';
 import { InvitationActionsCell } from './invitation-actions-cell';
 
@@ -18,7 +20,6 @@ const STATUS_STYLES: Record<
 };
 
 export const invitationsColumns: ColumnDef<InvitationRow>[] = [
-  // Email column
   {
     accessorKey: 'email',
     header: () => <p className='text-sm font-bricolage-grotesque'>Email</p>,
@@ -28,7 +29,6 @@ export const invitationsColumns: ColumnDef<InvitationRow>[] = [
       </p>
     ),
   },
-  // Role column
   {
     accessorKey: 'role',
     header: () => <p className='text-sm font-bricolage-grotesque'>Role</p>,
@@ -38,7 +38,6 @@ export const invitationsColumns: ColumnDef<InvitationRow>[] = [
       </p>
     ),
   },
-  // Expires At column
   {
     accessorKey: 'expiresAt',
     header: () => <p className='text-sm font-bricolage-grotesque'>Expires</p>,
@@ -52,7 +51,6 @@ export const invitationsColumns: ColumnDef<InvitationRow>[] = [
       </p>
     ),
   },
-  // Status column
   {
     accessorKey: 'status',
     header: () => <p className='text-sm font-bricolage-grotesque'>Status</p>,
@@ -62,7 +60,6 @@ export const invitationsColumns: ColumnDef<InvitationRow>[] = [
       return <Badge variant={status?.variant}>{status?.label}</Badge>;
     },
   },
-  // Actions column
   {
     id: 'actions',
     header: () => <p className='text-sm font-bricolage-grotesque'>Actions</p>,

@@ -14,7 +14,8 @@ const ACTIVE_STATUSES: SubscriptionStatus[] = [
 ];
 
 export const entitlementsService = {
-  async getEntitlements(userId: string): Promise<Entitlements> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getEntitlements(_userId?: string): Promise<Entitlements> {
     try {
       const subscriptions = await auth.api.listActiveSubscriptions({
         headers: await headers(),

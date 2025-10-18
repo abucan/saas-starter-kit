@@ -3,9 +3,9 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Info, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Loader2, Info } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -40,12 +40,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useUploadThing } from '@/lib/utils/uploadthing';
 import {
-  updateWorkspaceSchema,
   type UpdateWorkspaceInput,
+  updateWorkspaceSchema,
 } from '@/features/workspace/schemas/workspace.schema';
 import type { Role } from '@/features/workspace/types';
+import { useUploadThing } from '@/lib/utils/uploadthing';
 import type { R } from '@/types/result';
 
 type WorkspaceSettingsFormProps = {

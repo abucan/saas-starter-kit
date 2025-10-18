@@ -40,7 +40,7 @@ export function PricingTables({
   }
 
   return (
-    <div className='flex flex-col text-center w-full'>
+    <div className='flex flex-col text-center max-w-2xl w-full'>
       <div className='flex flex-col items-center justify-center gap-4'>
         <Tabs
           defaultValue={frequency}

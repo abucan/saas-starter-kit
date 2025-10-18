@@ -1,11 +1,13 @@
-import { getDashboardContext } from '@/lib/auth/get-dashboard-context';
 import type { Metadata } from 'next';
-import { WorkspaceSettingsForm } from './_components/workspace-settings-form';
+
+import { DangerZoneCard } from '@/components/shared/danger-zone-card';
 import {
   deleteWorkspaceAction,
   updateWorkspaceAction,
 } from '@/features/workspace';
-import { DangerZoneCard } from '@/components/shared/danger-zone-card';
+import { getDashboardContext } from '@/lib/auth/get-dashboard-context';
+
+import { WorkspaceSettingsForm } from './_components/workspace-settings-form';
 
 export const metadata: Metadata = {
   title: 'Workspace Settings | Keyvaultify',
@@ -18,7 +20,7 @@ export default async function WorkspaceSettingsPage() {
     ctx.membership.role === 'owner' || ctx.membership.role === 'admin';
 
   return (
-    <div className='container mx-auto flex flex-col gap-6'>
+    <div className='flex flex-col gap-6 w-full'>
       <WorkspaceSettingsForm
         name={ctx.org.name}
         slug={ctx.org.slug}

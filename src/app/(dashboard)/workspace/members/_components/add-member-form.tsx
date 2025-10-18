@@ -1,10 +1,11 @@
 'use client';
 
 import { useTransition } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -22,12 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { Role } from '@/types/auth';
 import { inviteMemberAction } from '@/features/workspace/invitations/actions';
 import {
-  inviteMemberSchema,
   type InviteMemberInput,
+  inviteMemberSchema,
 } from '@/features/workspace/invitations/schemas/invitations.schema';
+import type { Role } from '@/types/auth';
 
 type AddMemberFormProps = {
   defaultRole: Role;
@@ -73,7 +74,6 @@ export function AddMemberForm({ defaultRole, onSuccess }: AddMemberFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-        {/* Email Field */}
         <FormField
           control={form.control}
           name='email'
@@ -93,7 +93,6 @@ export function AddMemberForm({ defaultRole, onSuccess }: AddMemberFormProps) {
           )}
         />
 
-        {/* Role Field */}
         <FormField
           control={form.control}
           name='role'
@@ -121,7 +120,6 @@ export function AddMemberForm({ defaultRole, onSuccess }: AddMemberFormProps) {
           )}
         />
 
-        {/* Submit Button */}
         <Button type='submit' disabled={isPending} className='w-full'>
           {isPending ? (
             <>

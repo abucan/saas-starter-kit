@@ -1,12 +1,13 @@
 'use client';
 
 import { useTransition } from 'react';
-import { Mail, X, Loader2 } from 'lucide-react';
+import { Loader2, Mail, X } from 'lucide-react';
 import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
-import type { InvitationRow } from '@/types/auth';
-import { resendInvitationAction } from '@/features/workspace/invitations/actions/resend-invitation.action';
 import { cancelInvitationAction } from '@/features/workspace/invitations/actions/cancel-invitation.action';
+import { resendInvitationAction } from '@/features/workspace/invitations/actions/resend-invitation.action';
+import type { InvitationRow } from '@/types/auth';
 
 type InvitationActionsCellProps = {
   invitation: InvitationRow;
@@ -60,7 +61,6 @@ export function InvitationActionsCell({
 
   return (
     <div className='flex items-center gap-2'>
-      {/* Resend Button */}
       <Button
         variant='outline'
         size='sm'
@@ -75,7 +75,6 @@ export function InvitationActionsCell({
         <span className='font-bricolage-grotesque'>Resend</span>
       </Button>
 
-      {/* Cancel Button */}
       <Button
         variant='outline'
         size='sm'

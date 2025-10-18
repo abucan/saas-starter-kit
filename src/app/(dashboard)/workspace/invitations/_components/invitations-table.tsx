@@ -1,12 +1,20 @@
 'use client';
 
 import {
-  useReactTable,
-  getCoreRowModel,
   flexRender,
+  getCoreRowModel,
+  useReactTable,
 } from '@tanstack/react-table';
 import { Mail } from 'lucide-react';
+
 import { Card } from '@/components/ui/card';
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
 import {
   Table,
   TableBody,
@@ -15,14 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@/components/ui/empty';
 import type { InvitationRow, Role } from '@/types/auth';
+
 import { invitationsColumns } from './invitations-columns';
 
 type InvitationsTableProps = {
@@ -34,7 +36,6 @@ export function InvitationsTable({
   invitations,
   currentUserRole,
 }: InvitationsTableProps) {
-  // Initialize TanStack Table
   const table = useReactTable({
     data: invitations,
     columns: invitationsColumns,
@@ -42,8 +43,7 @@ export function InvitationsTable({
   });
 
   return (
-    <div className='flex flex-col gap-4 w-full'>
-      {/* Invitations Table */}
+    <div className='flex flex-col gap-4 max-w-2xl w-full'>
       <Card className='overflow-hidden rounded-lg border p-0 w-full'>
         <Table>
           <TableHeader>
