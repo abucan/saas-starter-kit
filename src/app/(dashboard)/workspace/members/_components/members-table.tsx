@@ -82,7 +82,7 @@ export function MembersTable({
   });
 
   return (
-    <div className='flex flex-col gap-4 max-w-2xl w-full'>
+    <div className='flex flex-col gap-4 min-w-3/4'>
       {/* TODO: Add Member Button */}
       <Dialog open={addMemberDialogOpen} onOpenChange={setAddMemberDialogOpen}>
         <DialogContent>
@@ -109,7 +109,7 @@ export function MembersTable({
                 disabled={!canAddMembers}
               >
                 <Plus className='size-4' />
-                <span className='font-bricolage-grotesque'>Add Member</span>
+                <span>Add Member</span>
               </Button>
             </div>
           </TooltipTrigger>

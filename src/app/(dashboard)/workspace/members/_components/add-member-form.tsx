@@ -124,10 +124,10 @@ export function AddMemberForm({ defaultRole, onSuccess }: AddMemberFormProps) {
           {isPending ? (
             <>
               <Loader2 className='size-4 animate-spin' />
-              <span className='font-bricolage-grotesque'>Sending...</span>
+              <span>Sending...</span>
             </>
           ) : (
-            <span className='font-bricolage-grotesque'>Send Invitation</span>
+            <span>Send Invitation</span>
           )}
         </Button>
       </form>

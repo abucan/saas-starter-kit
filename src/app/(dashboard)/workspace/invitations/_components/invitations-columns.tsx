@@ -22,27 +22,25 @@ const STATUS_STYLES: Record<
 export const invitationsColumns: ColumnDef<InvitationRow>[] = [
   {
     accessorKey: 'email',
-    header: () => <p className='text-sm font-bricolage-grotesque'>Email</p>,
+    header: () => <p className='text-sm'>Email</p>,
     cell: ({ row }) => (
-      <p className='text-sm font-medium font-bricolage-grotesque'>
-        {row.original.email}
-      </p>
+      <p className='text-sm font-medium'>{row.original.email}</p>
     ),
   },
   {
     accessorKey: 'role',
-    header: () => <p className='text-sm font-bricolage-grotesque'>Role</p>,
+    header: () => <p className='text-sm'>Role</p>,
     cell: ({ row }) => (
-      <p className='text-sm text-muted-foreground font-bricolage-grotesque capitalize'>
+      <p className='text-sm text-muted-foreground capitalize'>
         {row.original.role}
       </p>
     ),
   },
   {
     accessorKey: 'expiresAt',
-    header: () => <p className='text-sm font-bricolage-grotesque'>Expires</p>,
+    header: () => <p className='text-sm'>Expires</p>,
     cell: ({ row }) => (
-      <p className='text-sm text-muted-foreground font-bricolage-grotesque'>
+      <p className='text-sm text-muted-foreground'>
         {new Date(row.original.expiresAt).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',
@@ -53,7 +51,7 @@ export const invitationsColumns: ColumnDef<InvitationRow>[] = [
   },
   {
     accessorKey: 'status',
-    header: () => <p className='text-sm font-bricolage-grotesque'>Status</p>,
+    header: () => <p className='text-sm'>Status</p>,
     cell: ({ row }) => {
       const status =
         STATUS_STYLES[row.original.status] || STATUS_STYLES.pending;
@@ -62,7 +60,7 @@ export const invitationsColumns: ColumnDef<InvitationRow>[] = [
   },
   {
     id: 'actions',
-    header: () => <p className='text-sm font-bricolage-grotesque'>Actions</p>,
+    header: () => <p className='text-sm'>Actions</p>,
     cell: ({ row }) => (
       <div className='flex items-center gap-2'>
         <CopyLinkButton

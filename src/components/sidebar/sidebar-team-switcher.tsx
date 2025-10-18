@@ -60,20 +60,20 @@ export function SidebarTeamSwitcher({
                 size='lg'
                 className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer'
               >
-                <div className='bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
+                <div className='text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
                   <Image
                     src={activeTeam?.logo ?? '/avatars/apple.png'}
                     alt={activeTeam?.name ?? 'team logo'}
                     width={32}
                     height={32}
-                    className='rounded-lg'
+                    className='rounded-lg w-full h-full'
                   />
                 </div>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium font-bricolage-grotesque'>
+                  <span className='truncate font-medium'>
                     {activeTeam?.name}
                   </span>
-                  <span className='truncate text-xs font-bricolage-grotesque'>
+                  <span className='truncate text-xs'>
                     {plan
                       ? `${plan.charAt(0).toUpperCase()}${plan.slice(1)}`
                       : 'Hobby'}
@@ -89,7 +89,7 @@ export function SidebarTeamSwitcher({
               sideOffset={4}
             >
               <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                Teams
+                Workspaces
               </DropdownMenuLabel>
               {teams.map((team) => (
                 <DropdownMenuItem
@@ -97,7 +97,9 @@ export function SidebarTeamSwitcher({
                   className='gap-2 p-2'
                   onClick={() => {
                     startTransition(async () => {
-                      const res = await switchWorkspaceAction(team.id);
+                      const res = await switchWorkspaceAction({
+                        workspaceId: team.id,
+                      });
                       if (!res.ok) {
                         toast.error(
                           res.message || 'Failed to switch workspace'
@@ -112,7 +114,7 @@ export function SidebarTeamSwitcher({
                       alt={team.name ?? 'team logo'}
                       width={32}
                       height={32}
-                      className='rounded-md'
+                      className='rounded-md w-full h-full'
                     />
                   </div>
                   {team.name}
@@ -128,7 +130,7 @@ export function SidebarTeamSwitcher({
                   <div className='flex size-6 items-center justify-center rounded-md border bg-transparent'>
                     <Plus className='size-4' />
                   </div>
-                  <div className='text-muted-foreground font-medium font-bricolage-grotesque'>
+                  <div className='text-muted-foreground font-medium'>
                     Add workspace
                   </div>
                 </div>

@@ -1,8 +1,8 @@
 import type { Organization } from '@/lib/auth/auth';
 export type {
-  Role,
-  OrganizationWithMetadata,
   FullOrganization,
+  OrganizationWithMetadata,
+  Role,
 } from '@/types/auth';
 
 export type CreateWorkspaceInput = {

@@ -72,7 +72,7 @@ export function InvitationActionsCell({
         ) : (
           <Mail className='size-4' />
         )}
-        <span className='font-bricolage-grotesque'>Resend</span>
+        <span>Resend</span>
       </Button>
 
       <Button
@@ -87,9 +87,7 @@ export function InvitationActionsCell({
         ) : (
           <X className='size-4 text-destructive' />
         )}
-        <span className='text-destructive font-bricolage-grotesque'>
-          Cancel
-        </span>
+        <span className='text-destructive'>Cancel</span>
       </Button>
     </div>
   );

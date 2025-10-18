@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
         hostname: 'utfs.io',
       },
       {
+        protocol: 'https',
+        hostname: '*.ufs.sh',
+      },
+      {
         // Google User Content - For Google profile avatars
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',

@@ -48,12 +48,8 @@ export function SidebarUser({ user }: { user: SidebarContext['user'] }) {
                 <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium font-bricolage-grotesque'>
-                  {user?.name}
-                </span>
-                <span className='truncate text-xs font-bricolage-grotesque'>
-                  {user?.email}
-                </span>
+                <span className='truncate font-medium'>{user?.name}</span>
+                <span className='truncate text-xs'>{user?.email}</span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
@@ -74,12 +70,8 @@ export function SidebarUser({ user }: { user: SidebarContext['user'] }) {
                   <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium font-bricolage-grotesque'>
-                    {user?.name}
-                  </span>
-                  <span className='truncate text-xs font-bricolage-grotesque'>
-                    {user?.email}
-                  </span>
+                  <span className='truncate font-medium'>{user?.name}</span>
+                  <span className='truncate text-xs'>{user?.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 
 import { DangerZoneCard } from '@/components/shared/danger-zone-card';
-import {
-  deleteWorkspaceAction,
-  updateWorkspaceAction,
-} from '@/features/workspace';
+import { deleteWorkspaceAction } from '@/features/workspace/actions/delete-workspace.action';
+import { updateWorkspaceAction } from '@/features/workspace/actions/update-workspace.action';
 import { getDashboardContext } from '@/lib/auth/get-dashboard-context';
 
 import { WorkspaceSettingsForm } from './_components/workspace-settings-form';

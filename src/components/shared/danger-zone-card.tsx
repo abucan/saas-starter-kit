@@ -113,18 +113,16 @@ export function DangerZoneCard({
   return (
     <Card className='border-destructive/50 max-w-2xl w-full'>
       <CardHeader className='gap-0'>
-        <CardTitle className='text-base font-bold font-bricolage-grotesque text-destructive'>
+        <CardTitle className='text-base font-bold text-destructive'>
           {title}
         </CardTitle>
-        <CardDescription className='text-sm font-bricolage-grotesque'>
-          {description}
-        </CardDescription>
+        <CardDescription className='text-sm'>{description}</CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
         <div className='flex flex-row items-start gap-4'>
           <AlertTriangle className='size-6 text-destructive shrink-0 mt-0.5' />
           <div className='flex flex-col gap-2'>
-            <div className='text-sm text-muted-foreground font-bricolage-grotesque'>
+            <div className='text-sm text-muted-foreground'>
               {warningContent}
             </div>
           </div>
@@ -134,10 +132,10 @@ export function DangerZoneCard({
           <>
             <Separator />
             <div className='bg-destructive/10 border border-destructive/20 rounded-lg p-4'>
-              <p className='text-sm font-semibold text-destructive font-bricolage-grotesque mb-2'>
+              <p className='text-sm font-semibold text-destructive mb-2'>
                 ⚠️ Final Warning
               </p>
-              <div className='text-sm text-muted-foreground font-bricolage-grotesque'>
+              <div className='text-sm text-muted-foreground'>
                 {finalWarningContent}
               </div>
             </div>

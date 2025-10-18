@@ -1,10 +1,13 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { redirect } from 'next/navigation';
-import { workspaceService } from '../services/workspace.service';
+
 import { handleError } from '@/lib/errors/error-handler';
 import type { R } from '@/types/result';
+
+import { workspaceService } from '../services/workspace.service';
 
 export async function deleteWorkspaceAction(): Promise<R> {
   try {
@@ -14,7 +17,7 @@ export async function deleteWorkspaceAction(): Promise<R> {
 
     redirect('/dashboard');
   } catch (error) {
-    if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
+    if (isRedirectError(error)) {
       throw error;
     }
     return handleError(error);

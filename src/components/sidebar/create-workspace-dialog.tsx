@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createWorkspaceAction } from '@/features/workspace/actions';
+import { createWorkspaceAction } from '@/features/workspace/actions/create-workspace.action';
 import {
   type CreateWorkspaceInput,
   createWorkspaceSchema,

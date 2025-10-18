@@ -43,7 +43,7 @@ export function InvitationsTable({
   });
 
   return (
-    <div className='flex flex-col gap-4 max-w-2xl w-full'>
+    <div className='flex flex-col gap-4 min-w-3/4'>
       <Card className='overflow-hidden rounded-lg border p-0 w-full'>
         <Table>
           <TableHeader>
