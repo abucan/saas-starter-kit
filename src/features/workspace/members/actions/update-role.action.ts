@@ -1,9 +1,11 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { membersService } from '../services/member.service';
+
 import { handleError } from '@/lib/errors/error-handler';
 import type { R } from '@/types/result';
+
+import { membersService } from '../services/member.service';
 
 export async function updateMemberRoleAction(
   input: unknown

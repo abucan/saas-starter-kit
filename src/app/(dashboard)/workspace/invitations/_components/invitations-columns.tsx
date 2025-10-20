@@ -62,7 +62,7 @@ export const invitationsColumns: ColumnDef<InvitationRow>[] = [
     id: 'actions',
     header: () => <p className='text-sm'>Actions</p>,
     cell: ({ row }) => (
-      <div className='flex items-center gap-2'>
+      <div className='flex flex-row items-center gap-4'>
         <CopyLinkButton
           url={row.original.acceptUrl}
           canCopy={row.original._acl.canCopy}

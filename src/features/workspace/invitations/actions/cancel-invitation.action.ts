@@ -1,9 +1,11 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { invitationsService } from '../services/invitations.service';
-import { R } from '@/types/result';
+
 import { handleError } from '@/lib/errors';
+import { R } from '@/types/result';
+
+import { invitationsService } from '../services/invitations.service';
 
 export async function cancelInvitationAction(
   input: unknown

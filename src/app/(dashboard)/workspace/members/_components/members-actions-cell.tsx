@@ -18,10 +18,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  leaveWorkspaceAction,
-  removeMemberAction,
-} from '@/features/workspace/members/actions';
+import { leaveWorkspaceAction } from '@/features/workspace/members/actions/leave-workspace.action';
+import { removeMemberAction } from '@/features/workspace/members/actions/remove-member.action';
 import type { MemberRow } from '@/types/auth';
 
 type MemberActionsCellProps = {
@@ -51,7 +49,6 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
           `${member.user.name} has been removed from the workspace`
         );
         setRemoveDialogOpen(false);
-        // Don't reset isRemoving - component will unmount on revalidation
       }
     } catch {
       toast.error('An unexpected error occurred');
@@ -71,7 +68,6 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
         setIsLeaving(false);
       } else {
         toast.success('You have left the workspace');
-        // Redirect happens in the action, so we don't close dialog
       }
     } catch {
       toast.error('An unexpected error occurred');
@@ -103,14 +99,12 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
     return messages[code] ?? defaultMessage ?? 'Failed to leave workspace';
   }
 
-  // Show nothing if no actions available
   if (!member._acl.canLeave && !member._acl.canRemove) {
     return <span className='text-sm text-muted-foreground'>—</span>;
   }
 
   return (
     <div className='flex items-center gap-2'>
-      {/* Leave Button (for self) */}
       {member._acl.canLeave && (
         <>
           <Tooltip>
@@ -176,7 +170,6 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
         </>
       )}
 
-      {/* Remove Button (for others) */}
       {member._acl.canRemove && (
         <>
           <Tooltip>

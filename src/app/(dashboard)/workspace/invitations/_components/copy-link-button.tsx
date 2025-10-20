@@ -29,7 +29,7 @@ export function CopyLinkButton({ url, canCopy }: CopyLinkButtonProps) {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          size='icon'
+          size='icon-sm'
           variant='outline'
           onClick={handleCopy}
           disabled={!canCopy}

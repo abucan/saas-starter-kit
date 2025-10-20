@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { inviteMemberAction } from '@/features/workspace/invitations/actions';
+import { inviteMemberAction } from '@/features/workspace/invitations/actions/invite-member.action';
 import {
   type InviteMemberInput,
   inviteMemberSchema,
@@ -74,51 +74,53 @@ export function AddMemberForm({ defaultRole, onSuccess }: AddMemberFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-        <FormField
-          control={form.control}
-          name='email'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type='email'
-                  placeholder='john@example.com'
-                  disabled={isPending}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='flex flex-row w-full gap-4'>
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => (
+              <FormItem className='w-full'>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type='email'
+                    placeholder='john@example.com'
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name='role'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Role</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  disabled={isPending}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select a role' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value='member'>Member</SelectItem>
-                    <SelectItem value='admin'>Admin</SelectItem>
-                    <SelectItem value='owner'>Owner</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name='role'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={isPending}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder='Select a role' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='member'>Member</SelectItem>
+                      <SelectItem value='admin'>Admin</SelectItem>
+                      <SelectItem value='owner'>Owner</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <Button type='submit' disabled={isPending} className='w-full'>
           {isPending ? (

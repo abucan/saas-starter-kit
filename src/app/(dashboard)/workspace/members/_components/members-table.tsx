@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import {
-  type ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -54,7 +53,6 @@ type MembersTableProps = {
 
 export function MembersTable({
   members,
-  currentUserId,
   isPersonalWorkspace,
   defaultRole,
   currentUserRole,
@@ -83,7 +81,6 @@ export function MembersTable({
 
   return (
     <div className='flex flex-col gap-4 min-w-3/4'>
-      {/* TODO: Add Member Button */}
       <Dialog open={addMemberDialogOpen} onOpenChange={setAddMemberDialogOpen}>
         <DialogContent>
           <DialogHeader>

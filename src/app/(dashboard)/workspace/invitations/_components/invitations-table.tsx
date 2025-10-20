@@ -32,10 +32,7 @@ type InvitationsTableProps = {
   currentUserRole: Role;
 };
 
-export function InvitationsTable({
-  invitations,
-  currentUserRole,
-}: InvitationsTableProps) {
+export function InvitationsTable({ invitations }: InvitationsTableProps) {
   const table = useReactTable({
     data: invitations,
     columns: invitationsColumns,

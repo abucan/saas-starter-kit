@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 export const inviteMemberSchema = z.object({
-  email: z.string().email('Please provide a valid email address').trim(),
+  email: z.email('Please provide a valid email address').trim(),
   role: z.enum(['owner', 'admin', 'member']),
 });
 
 export const resendInvitationSchema = z.object({
-  email: z.string().email('Please provide a valid email address').trim(),
+  email: z.email('Please provide a valid email address').trim(),
   role: z.enum(['owner', 'admin', 'member']),
 });
 

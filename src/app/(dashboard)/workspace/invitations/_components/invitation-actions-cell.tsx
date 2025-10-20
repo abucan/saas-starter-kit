@@ -80,7 +80,7 @@ export function InvitationActionsCell({
         size='sm'
         onClick={handleCancel}
         disabled={isCanceling || !invitation._acl.canCancel}
-        className='border-destructive/50 hover:bg-destructive/10'
+        className='border-destructive/10 hover:bg-destructive/20'
       >
         {isCanceling ? (
           <Loader2 className='size-4 animate-spin text-destructive' />

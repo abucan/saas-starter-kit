@@ -2,8 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
-import type { MemberRow, Role } from '@/types/auth';
-import { updateMemberRoleAction } from '@/features/workspace/members/actions';
+
 import {
   Select,
   SelectContent,
@@ -11,6 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { updateMemberRoleAction } from '@/features/workspace/members/actions/update-role.action';
+import type { MemberRow, Role } from '@/types/auth';
 
 type RoleCellProps = {
   member: MemberRow;
@@ -24,7 +25,7 @@ export function RoleCell({ member }: RoleCellProps) {
 
   async function handleRoleChange(newRole: Role) {
     const previousRole = optimisticRole;
-    setOptimisticRole(newRole); // Optimistic update
+    setOptimisticRole(newRole);
 
     startTransition(async () => {
       const result = await updateMemberRoleAction({
@@ -33,7 +34,7 @@ export function RoleCell({ member }: RoleCellProps) {
       });
 
       if (!result.ok) {
-        setOptimisticRole(previousRole); // Revert on error
+        setOptimisticRole(previousRole);
         const errorMessage = getErrorMessage(result.code, result.message);
         toast.error(errorMessage);
       } else {
@@ -57,7 +58,6 @@ export function RoleCell({ member }: RoleCellProps) {
     return messages[code] ?? defaultMessage ?? 'Failed to update role';
   }
 
-  // Determine if role options should be disabled
   const isDisabled = isPending || !member._acl.canEditRole;
   const cannotDemoteLastOwner =
     member._meta.isOwner && !member._meta.hasOtherOwners;
