@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -26,7 +25,7 @@ import {
 } from '@/components/ui/card';
 import { R } from '@/types/result';
 
-export function DeleteAccountCard({ action }: { action: () => Promise<R> }) {
+export function DeleteWorkspaceCard({ action }: { action: () => Promise<R> }) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -47,7 +46,7 @@ export function DeleteAccountCard({ action }: { action: () => Promise<R> }) {
       const result = await action();
 
       if (result.ok) {
-        toast.success('Check your email to delete your account');
+        toast.success('Workspace deleted successfully');
         setIsDeleting(false);
         setIsConfirming(false);
       }
@@ -68,12 +67,14 @@ export function DeleteAccountCard({ action }: { action: () => Promise<R> }) {
   function getErrorMessage(code: string, defaultMessage?: string): string {
     const errorMessages: Record<string, string> = {
       FORBIDDEN:
-        'You must transfer ownership of your workspaces before deleting your account',
-      UNAUTHORIZED: 'Please sign in to delete your account',
+        'You must transfer ownership of your workspace before deleting it',
+      UNAUTHORIZED: 'Please sign in to delete your workspace',
       INTERNAL_ERROR: 'Something went wrong. Please try again later',
     };
 
-    return errorMessages[code] ?? defaultMessage ?? 'Failed to delete account';
+    return (
+      errorMessages[code] ?? defaultMessage ?? 'Failed to delete workspace'
+    );
   }
 
   return (
@@ -83,8 +84,9 @@ export function DeleteAccountCard({ action }: { action: () => Promise<R> }) {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              You will receive an email with a link to delete your account. This
-              action cannot be undone.
+              This will permanently delete this workspace, all projects, remove
+              all members, and all associated data. This action cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -100,9 +102,9 @@ export function DeleteAccountCard({ action }: { action: () => Promise<R> }) {
       </AlertDialog>
       <Card className='w-full max-w-2xl'>
         <CardHeader>
-          <CardTitle>Delete Account</CardTitle>
+          <CardTitle>Delete Workspace</CardTitle>
           <CardDescription>
-            Permanently delete your account and all associated data
+            Permanently delete this workspace and all associated data
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -111,15 +113,7 @@ export function DeleteAccountCard({ action }: { action: () => Promise<R> }) {
             <p className='text-sm text-muted-foreground'>
               This action{' '}
               <strong className='text-foreground'>cannot be undone</strong>.
-              Your account and all data will be permanently deleted. This does
-              not cancel your subscription—manage that on the{' '}
-              <Link
-                href='/account/billing'
-                className='text-primary-foreground underline'
-              >
-                billing
-              </Link>{' '}
-              page.
+              This workspace and all data will be permanently deleted.
             </p>
           </div>
         </CardContent>
@@ -135,7 +129,7 @@ export function DeleteAccountCard({ action }: { action: () => Promise<R> }) {
                 Please wait...
               </>
             ) : (
-              'Delete Account'
+              'Delete Workspace'
             )}
           </Button>
         </CardFooter>

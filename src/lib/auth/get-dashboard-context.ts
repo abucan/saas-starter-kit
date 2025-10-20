@@ -44,6 +44,11 @@ export const getDashboardContext = cache(async () => {
     session.user.id
   );
 
+  const metadata =
+    typeof org?.metadata === 'string'
+      ? JSON.parse(org.metadata)
+      : org?.metadata;
+
   return {
     user: {
       id: session.user.id,
@@ -55,9 +60,9 @@ export const getDashboardContext = cache(async () => {
       id: org?.id ?? '',
       slug: org?.slug ?? '',
       name: org?.name ?? '',
-      isPersonal: Boolean(org?.metadata?.isPersonal),
+      isPersonal: Boolean(metadata?.isPersonal),
       logo: org?.logo ?? '',
-      defaultRole: (org?.metadata?.default_role as Role) ?? 'member',
+      defaultRole: (metadata?.default_role as Role) ?? 'member',
     },
     membership: { role },
     teams: teams ?? [],

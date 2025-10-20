@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import { deleteProfileAction } from '@/features/user/actions/delete-profile.action';
+
 import { DeleteAccountCard } from './_components/delete-account-card';
 
 export const metadata: Metadata = {
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 export default function SecurityPage() {
   return (
     <div className='flex-1'>
-      <DeleteAccountCard />
+      <DeleteAccountCard action={deleteProfileAction} />
     </div>
   );
 }

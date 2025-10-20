@@ -113,9 +113,17 @@ export function WorkspaceSettingsForm({
       });
 
       toast.success('Logo uploaded successfully');
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (error) {
       console.error('Logo upload error:', error);
       toast.error('Failed to upload logo. Please try again.');
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -184,15 +192,14 @@ export function WorkspaceSettingsForm({
           </CardHeader>
 
           <CardContent className='space-y-6'>
-            {/* Logo Upload Section */}
             <div className='flex items-center gap-4'>
-              <Avatar className='size-20 rounded-lg'>
+              <Avatar className='size-20'>
                 <AvatarImage
                   src={currentLogo ?? undefined}
                   alt={name}
                   className='object-cover'
                 />
-                <AvatarFallback className='text-lg rounded-lg'>
+                <AvatarFallback className='text-lg'>
                   {getWorkspaceInitials(name)}
                 </AvatarFallback>
               </Avatar>
@@ -229,7 +236,6 @@ export function WorkspaceSettingsForm({
               </div>
             </div>
 
-            {/* Hidden logo field */}
             <FormField
               control={form.control}
               name='logo'
@@ -245,7 +251,6 @@ export function WorkspaceSettingsForm({
 
             <Separator />
 
-            {/* Workspace Name */}
             <FormField
               control={form.control}
               name='name'
@@ -269,7 +274,6 @@ export function WorkspaceSettingsForm({
               )}
             />
 
-            {/* Workspace Slug */}
             <FormField
               control={form.control}
               name='slug'
@@ -311,7 +315,6 @@ export function WorkspaceSettingsForm({
 
             <Separator />
 
-            {/* Default Role */}
             <FormField
               control={form.control}
               name='defaultRole'

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
-import { DangerZoneCard } from '@/components/shared/danger-zone-card';
 import { deleteWorkspaceAction } from '@/features/workspace/actions/delete-workspace.action';
 import { updateWorkspaceAction } from '@/features/workspace/actions/update-workspace.action';
 import { getDashboardContext } from '@/lib/auth/get-dashboard-context';
 
+import { DeleteWorkspaceCard } from './_components/delete-workspace-card';
 import { WorkspaceSettingsForm } from './_components/workspace-settings-form';
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default async function WorkspaceSettingsPage() {
     ctx.membership.role === 'owner' || ctx.membership.role === 'admin';
 
   return (
-    <div className='flex flex-col gap-6 w-full'>
+    <div className='flex flex-col gap-6 w-full mb-6'>
       <WorkspaceSettingsForm
         name={ctx.org.name}
         slug={ctx.org.slug}
@@ -28,38 +28,7 @@ export default async function WorkspaceSettingsPage() {
         canEdit={canEdit}
         updateAction={updateWorkspaceAction}
       />
-      <DangerZoneCard
-        title='Delete Workspace'
-        description='Permanently delete this workspace and all associated data'
-        warningContent={
-          <>
-            Deleting your workspace is <strong>irreversible</strong> and will
-            not end your subscription. To delete your workspace, please make
-            sure you are the only owner of the workspace.
-          </>
-        }
-        finalWarningContent={
-          <>
-            This will permanently delete the workspace, all projects,
-            environments, and secrets. This action cannot be undone.
-          </>
-        }
-        actionLabel='Delete Workspace'
-        confirmLabel='Confirm Deletion'
-        action={deleteWorkspaceAction}
-        canPerformAction={canEdit}
-        disabledReason={
-          ctx.org.isPersonal
-            ? 'Cannot delete personal workspace'
-            : 'Only the sole owner can delete the workspace'
-        }
-        errorMessages={{
-          CANNOT_DELETE_PERSONAL_WORKSPACE:
-            'Personal workspaces cannot be deleted.',
-          MUST_TRANSFER_OWNERSHIP:
-            'Transfer ownership to another member before deleting.',
-        }}
-      />
+      <DeleteWorkspaceCard action={deleteWorkspaceAction} />
     </div>
   );
 }
