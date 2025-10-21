@@ -1,3 +1,4 @@
+import { ModeToggle } from '@/components/shared/mode-toggle';
 import { AppSidebar } from '@/components/sidebar';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -28,7 +29,7 @@ export default async function DashboardLayout({
               />
               {/* <SearchCommand /> */}
             </div>
-            {/* <ModeToggle /> */}
+            <ModeToggle />
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 pt-0'>

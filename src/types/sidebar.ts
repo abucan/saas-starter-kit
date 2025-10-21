@@ -19,7 +19,7 @@ export type SidebarContext = {
     role: 'owner' | 'admin' | 'member';
   };
   teams: Organization[] | undefined;
-  members: MemberRow[];
-  invitations: InvitationRow[];
+  members: MemberRow[] | undefined;
+  invitations: InvitationRow[] | undefined;
   subscription: Entitlements;
 };

@@ -1,6 +1,7 @@
 import { Bricolage_Grotesque, Spectral } from 'next/font/google';
 import type { Metadata } from 'next';
 
+import { ThemeProvider } from '@/components/shared/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 
 import './globals.css';
@@ -76,12 +77,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body
         className={`${fontBricolageGrotesque.variable} ${fontSpectral.variable} antialiased`}
       >
-        <main>{children}</main>
-        <Toaster position='top-center' />
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='light'
+          enableSystem
+          disableTransitionOnChange
+        >
+          <main>{children}</main>
+          <Toaster position='top-center' />
+        </ThemeProvider>
       </body>
     </html>
   );
