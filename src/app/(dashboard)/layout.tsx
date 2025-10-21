@@ -1,3 +1,4 @@
+import { AppBreadcrumbs } from '@/components/shared/app-breadcrumbs';
 import { ModeToggle } from '@/components/shared/mode-toggle';
 import { AppSidebar } from '@/components/sidebar';
 import { Separator } from '@/components/ui/separator';
@@ -27,7 +28,7 @@ export default async function DashboardLayout({
                 orientation='vertical'
                 className='mr-2 data-[orientation=vertical]:h-4'
               />
-              {/* <SearchCommand /> */}
+              <AppBreadcrumbs />
             </div>
             <ModeToggle />
           </div>
