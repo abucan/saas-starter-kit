@@ -1,11 +1,14 @@
 import 'server-only';
 
 import { headers } from 'next/headers';
+import { desc, eq } from 'drizzle-orm';
 
 import type { Organization } from '@/lib/auth/auth';
 import { auth } from '@/lib/auth/auth';
 import { requireActiveMember } from '@/lib/auth/guards';
 import { isPersonalWorkspace } from '@/lib/auth/org-context';
+import { db } from '@/lib/db';
+import { organization, session } from '@/lib/db/schemas';
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
 
@@ -130,6 +133,26 @@ export const membersService = {
         memberIdOrEmail: validated.memberId,
       },
     });
+
+    const personalWorkspace = await db.query.organization.findFirst({
+      where: eq(organization.slug, `pw-${validated.userId}`),
+    });
+
+    if (personalWorkspace?.id) {
+      const latestSession = await db.query.session.findFirst({
+        where: eq(session.userId, validated.userId),
+        orderBy: desc(session.updatedAt),
+      });
+
+      if (latestSession?.id) {
+        await db
+          .update(session)
+          .set({
+            activeOrganizationId: personalWorkspace.id,
+          })
+          .where(eq(session.userId, validated.userId));
+      }
+    }
   },
 
   async leaveWorkspace(): Promise<void> {

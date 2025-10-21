@@ -38,6 +38,7 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
     try {
       const result = await removeMemberAction({
         memberId: member.id,
+        userId: member.user.id,
       });
 
       if (!result.ok) {
@@ -131,7 +132,7 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
                   Are you sure you want to leave this workspace?
                 </DialogDescription>
               </DialogHeader>
-              <div className='py-4'>
+              <DialogDescription>
                 <p className='text-sm text-muted-foreground'>
                   You will lose access to all workspace resources and projects.
                   {member._meta.isOwner && (
@@ -141,7 +142,7 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
                     </span>
                   )}
                 </p>
-              </div>
+              </DialogDescription>
               <DialogFooter>
                 <Button
                   variant='outline'
@@ -197,7 +198,7 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
                   workspace?
                 </DialogDescription>
               </DialogHeader>
-              <div className='py-4'>
+              <DialogDescription>
                 <p className='text-sm text-muted-foreground'>
                   This member will immediately lose access to all workspace
                   resources. This action cannot be undone.
@@ -208,7 +209,8 @@ export function MemberActionsCell({ member }: MemberActionsCellProps) {
                     </span>
                   )}
                 </p>
-              </div>
+              </DialogDescription>
+
               <DialogFooter>
                 <Button
                   variant='outline'

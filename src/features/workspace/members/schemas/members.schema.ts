@@ -7,6 +7,7 @@ export const updateMemberRoleSchema = z.object({
 
 export const removeMemberSchema = z.object({
   memberId: z.string().min(1, 'Member ID is required'),
+  userId: z.string().min(1, 'User ID is required'),
 });
 
 export type UpdateMemberRoleInput = z.infer<typeof updateMemberRoleSchema>;
