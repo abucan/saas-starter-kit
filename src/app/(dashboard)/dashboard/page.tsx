@@ -1,6 +1,12 @@
+import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
 import { ToastOnce } from '@/components/shared/toast-once';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Overview of your workspaces, projects, and recent activity',
+};
 
 export default async function DashboardPage() {
   const c = await cookies();

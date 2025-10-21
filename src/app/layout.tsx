@@ -18,8 +18,56 @@ const fontSpectral = Spectral({
 });
 
 export const metadata: Metadata = {
-  title: 'Keyvaultify App',
-  description: 'Multi-Environment Secret Management',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  ),
+  title: {
+    default: 'SaaS Starter',
+    template: '%s | SaaS Starter',
+  },
+  description: 'A modern SaaS application built with Next.js',
+  keywords: ['saas', 'next.js', 'react', 'typescript'],
+  authors: [{ name: 'Your Name' }],
+  creator: 'Your Company',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    title: 'SaaS Starter',
+    description: 'A modern SaaS application built with Next.js',
+    siteName: 'SaaS Starter',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'SaaS Starter',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SaaS Starter',
+    description: 'A modern SaaS application built with Next.js',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
