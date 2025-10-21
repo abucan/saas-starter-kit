@@ -1,10 +1,13 @@
 import 'server-only';
 
 import { headers } from 'next/headers';
+import { and, count, eq } from 'drizzle-orm';
 
 import type { Organization } from '@/lib/auth/auth';
 import { auth } from '@/lib/auth/auth';
 import { isPersonalWorkspace } from '@/lib/auth/org-context';
+import { db } from '@/lib/db';
+import { member } from '@/lib/db/schemas';
 import { AppError } from '@/lib/errors/app-error';
 import { ERROR_CODES } from '@/lib/errors/error-codes';
 
@@ -17,6 +20,40 @@ import {
 export const workspaceService = {
   async createWorkspace(input: unknown): Promise<{ id: string; slug: string }> {
     const validated = createWorkspaceSchema.parse(input);
+
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    const subscriptions = await auth.api.listActiveSubscriptions({
+      headers: await headers(),
+    });
+
+    const activeSubscription = subscriptions?.find(
+      (s) => s.status === 'active' || s.status === 'trialing'
+    );
+
+    const workspaceLimits = activeSubscription?.limits?.workspaces ?? 0;
+
+    const ownedWorkspaces = await db
+      .select({ count: count() })
+      .from(member)
+      .where(
+        and(
+          eq(member.userId, session?.user?.id as string),
+          eq(member.role, 'owner')
+        )
+      );
+
+    const ownedWorkspacesCount = ownedWorkspaces[0]?.count ?? 0;
+
+    if (!activeSubscription || ownedWorkspacesCount - 1 >= workspaceLimits) {
+      throw new AppError(
+        ERROR_CODES.FORBIDDEN,
+        'You have reached the maximum number of workspaces, please upgrade your plan to create more workspaces',
+        403
+      );
+    }
 
     const slugCheck = await auth.api.checkOrganizationSlug({
       headers: await headers(),
