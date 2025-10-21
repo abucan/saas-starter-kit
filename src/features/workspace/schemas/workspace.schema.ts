@@ -45,10 +45,10 @@ export const updateWorkspaceSchema = z.object({
     )
     .optional(),
   logo: z
-    .string()
     .url('Must be a valid URL')
-    .refine((url) => url.startsWith('https://'), 'Logo must use HTTPS')
-    .optional(),
+    .optional()
+    .or(z.literal('').transform(() => undefined))
+    .or(z.null()),
   defaultRole: z.enum(['owner', 'admin', 'member']).optional(),
 });
 

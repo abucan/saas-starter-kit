@@ -73,13 +73,17 @@ export function WorkspaceSettingsForm({
 
   const { startUpload, isUploading } = useUploadThing('avatarUploader');
 
+  const personalSafeSchema = isPersonal
+    ? updateWorkspaceSchema.omit({ slug: true, defaultRole: true })
+    : updateWorkspaceSchema;
+
   const form = useForm<UpdateWorkspaceInput>({
-    resolver: zodResolver(updateWorkspaceSchema),
+    resolver: zodResolver(personalSafeSchema),
     defaultValues: {
       name,
       slug,
-      logo: logo ?? undefined,
-      defaultRole,
+      logo: logo ?? null,
+      defaultRole: defaultRole ?? 'member',
     },
   });
 
