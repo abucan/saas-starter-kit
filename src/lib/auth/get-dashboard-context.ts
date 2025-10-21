@@ -20,13 +20,48 @@ export const getDashboardContext = cache(async () => {
     redirect('/signin');
   }
 
-  const org = await auth.api.getFullOrganization({
+  let org = await auth.api.getFullOrganization({
     headers: await headers(),
   });
 
   const teams = await auth.api.listOrganizations({
     headers: await headers(),
   });
+
+  // Check if user is still a member of their active workspace
+  const isMemberOfActiveOrg = org?.members?.some(
+    (m) => m.userId === session.user.id
+  );
+
+  // If user is not a member (kicked or org deleted), switch to a valid workspace
+  if (!org || !isMemberOfActiveOrg) {
+    // Find personal workspace or use first available workspace
+    const personalWorkspace = teams?.find((o) => {
+      const metadata =
+        typeof o.metadata === 'string' ? JSON.parse(o.metadata) : o.metadata;
+      return metadata?.isPersonal === true;
+    });
+
+    const targetWorkspace = personalWorkspace || teams?.[0];
+
+    if (targetWorkspace?.id) {
+      // Switch to valid workspace
+      await auth.api.setActiveOrganization({
+        headers: await headers(),
+        body: {
+          organizationId: targetWorkspace.id,
+        },
+      });
+
+      // Get the new active organization after switching
+      org = await auth.api.getFullOrganization({
+        headers: await headers(),
+      });
+    } else {
+      // No valid workspaces found - redirect to signin
+      redirect('/signin');
+    }
+  }
 
   const role =
     org?.members?.find((m) => m.userId === session.user.id)?.role ?? 'member';
