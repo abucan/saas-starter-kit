@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -57,7 +58,11 @@ export function DeleteWorkspaceCard({ action }: { action: () => Promise<R> }) {
         setIsDeleting(false);
         setIsConfirming(false);
       }
-    } catch {
+    } catch (error) {
+      if (isRedirectError(error)) {
+        throw error;
+      }
+
       toast.error('An unexpected error occurred');
       setIsDeleting(false);
       setIsConfirming(false);

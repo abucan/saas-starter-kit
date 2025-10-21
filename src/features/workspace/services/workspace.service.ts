@@ -109,7 +109,7 @@ export const workspaceService = {
     if (validated.slug !== undefined && !isPersonal) {
       payload.slug = validated.slug;
     }
-    if (validated.logo !== undefined) {
+    if (validated.logo !== undefined && validated.logo !== null) {
       payload.logo = validated.logo;
     }
 
