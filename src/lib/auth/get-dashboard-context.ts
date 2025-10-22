@@ -1,6 +1,5 @@
 import 'server-only';
 
-import { cache } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -8,16 +7,32 @@ import { entitlementsService } from '@/features/billing/services/entitlements.se
 import { computeInvitationACL } from '@/features/workspace/invitations/utils/compute-invitation-acl';
 import { computeMemberACL } from '@/features/workspace/members/utils/compute-member-acl';
 import { auth } from '@/lib/auth/auth';
+import { redis } from '@/lib/redis/client';
 import { FullOrganization, Role } from '@/types';
 import { InvitationRow } from '@/types/auth';
 
-export const getDashboardContext = cache(async () => {
+const DASHBOARD_CACHE_TTL = 300; // 5 minutes
+const CACHE_KEY_PREFIX = 'dashboard';
+
+export async function getDashboardContext() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   if (!session?.user) {
     redirect('/signin');
+  }
+
+  const cacheKey = `${CACHE_KEY_PREFIX}:${session.user.id}`;
+
+  try {
+    const cachedData = await redis.get(cacheKey);
+    if (cachedData) {
+      console.log('Serving from cache', cacheKey);
+      return JSON.parse(cachedData);
+    }
+  } catch (error) {
+    console.error('Redis GET error:', error);
   }
 
   const org = await auth.api.getFullOrganization({
@@ -49,7 +64,7 @@ export const getDashboardContext = cache(async () => {
       ? JSON.parse(org.metadata)
       : org?.metadata;
 
-  return {
+  const result = {
     user: {
       id: session.user.id,
       email: session.user.email!,
@@ -70,4 +85,13 @@ export const getDashboardContext = cache(async () => {
     invitations,
     subscription,
   };
-});
+
+  try {
+    await redis.setex(cacheKey, DASHBOARD_CACHE_TTL, JSON.stringify(result));
+    console.log('✅ Cached dashboard data for user:', session.user.id);
+  } catch (error) {
+    console.error('Redis cache write error:', error);
+  }
+
+  return result;
+}

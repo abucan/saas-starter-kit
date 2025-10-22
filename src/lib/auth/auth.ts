@@ -3,13 +3,14 @@ import { stripe } from '@better-auth/stripe';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
-import { emailOTP, organization } from 'better-auth/plugins';
+import { emailOTP, openAPI, organization } from 'better-auth/plugins';
 import { eq } from 'drizzle-orm';
 import Stripe from 'stripe';
 
 import { db } from '@/lib/db';
 import * as schema from '@/lib/db/schemas/auth.schema';
 import { AppError, ERROR_CODES } from '@/lib/errors';
+import { redis } from '@/lib/redis/client';
 
 import {
   sendDeleteAccountVerification,
@@ -37,7 +38,35 @@ export const auth = betterAuth({
       enabled: true,
       maxAge: 5 * 60,
     },
-    expiresIn: 60 * 60 * 24 * 7,
+  },
+  secondaryStorage: {
+    get: async (key: string) => {
+      try {
+        const data = await redis.get(`session:${key}`);
+        return data ? JSON.parse(data) : null;
+      } catch (error) {
+        console.error('Redis GET error:', error);
+        return null;
+      }
+    },
+    set: async (key: string, data: any) => {
+      try {
+        await redis.setex(
+          `session:${key}`,
+          60 * 60 * 24 * 7,
+          JSON.stringify(data)
+        );
+      } catch (error) {
+        console.error('Redis set error:', error);
+      }
+    },
+    delete: async (key: string) => {
+      try {
+        await redis.del(`session:${key}`);
+      } catch (error) {
+        console.error('Redis delete error:', error);
+      }
+    },
   },
   emailAndPassword: {
     enabled: false,
@@ -122,6 +151,7 @@ export const auth = betterAuth({
         ],
       },
     }),
+    openAPI(),
     nextCookies(),
   ],
   databaseHooks: {
