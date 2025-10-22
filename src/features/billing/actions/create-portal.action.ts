@@ -11,8 +11,8 @@ import { billingService } from '../services/billing.service';
 
 export async function createPortalAction(): Promise<R<never>> {
   try {
-    const userId = await requireUserId();
-    const portalUrl = await billingService.createPortalSession(userId);
+    await requireUserId();
+    const portalUrl = await billingService.createPortalSession();
     redirect(portalUrl as any);
   } catch (error) {
     if (isRedirectError(error)) {

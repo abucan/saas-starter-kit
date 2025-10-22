@@ -11,14 +11,9 @@ import { billingService } from '../services/billing.service';
 
 export async function createCheckoutAction(input: unknown): Promise<R<never>> {
   try {
-    const user = await requireUser();
+    await requireUser();
 
-    const checkoutUrl = await billingService.createCheckout(
-      input,
-      user.id,
-      user.email,
-      user.name
-    );
+    const checkoutUrl = await billingService.createCheckout(input);
 
     redirect(checkoutUrl as any);
   } catch (error) {

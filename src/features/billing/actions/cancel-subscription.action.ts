@@ -11,9 +11,9 @@ import { billingService } from '../services/billing.service';
 
 export async function cancelSubscriptionAction(): Promise<R<never>> {
   try {
-    const userId = await requireUserId();
+    await requireUserId();
 
-    const portalUrl = await billingService.cancelSubscription(userId);
+    const portalUrl = await billingService.cancelSubscription();
 
     redirect(portalUrl as any);
   } catch (error) {

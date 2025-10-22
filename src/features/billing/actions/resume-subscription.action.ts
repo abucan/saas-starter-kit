@@ -11,9 +11,9 @@ import { billingService } from '../services/billing.service';
 
 export async function resumeSubscriptionAction(): Promise<R> {
   try {
-    const userId = await requireUserId();
+    await requireUserId();
 
-    await billingService.resumeSubscription(userId);
+    await billingService.resumeSubscription();
 
     revalidatePath('/account', 'layout');
 
