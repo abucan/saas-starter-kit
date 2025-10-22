@@ -9,12 +9,7 @@ import { ERROR_CODES } from '@/lib/errors/error-codes';
 import { checkoutSchema } from '../schemas/billing.schema';
 
 export const billingService = {
-  async createCheckout(
-    input: unknown,
-    userId: string,
-    _userEmail: string,
-    _userName: string | null
-  ): Promise<string> {
+  async createCheckout(input: unknown): Promise<string> {
     try {
       const validated = checkoutSchema.parse(input);
 
@@ -60,7 +55,7 @@ export const billingService = {
     }
   },
 
-  async cancelSubscription(userId: string): Promise<string> {
+  async cancelSubscription(): Promise<string> {
     try {
       const response = await auth.api.cancelSubscription({
         headers: await headers(),
@@ -88,7 +83,7 @@ export const billingService = {
     }
   },
 
-  async resumeSubscription(userId: string): Promise<void> {
+  async resumeSubscription(): Promise<void> {
     try {
       await auth.api.restoreSubscription({
         headers: await headers(),
@@ -104,7 +99,7 @@ export const billingService = {
     }
   },
 
-  async createPortalSession(userId: string): Promise<string> {
+  async createPortalSession(): Promise<string> {
     try {
       const response = await auth.api.createBillingPortal({
         headers: await headers(),
