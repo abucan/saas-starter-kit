@@ -1,7 +1,7 @@
 import type {
-  Organization,
-  Member,
   Invitation,
+  Member,
+  Organization,
 } from '@/lib/db/schemas/auth.schema';
 
 export type Role = 'owner' | 'admin' | 'member';

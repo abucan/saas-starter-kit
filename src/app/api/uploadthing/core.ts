@@ -1,5 +1,6 @@
-import { requireUserId } from '@/lib/auth/session';
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
+
+import { requireUserId } from '@/lib/auth/session';
 
 const f = createUploadthing();
 

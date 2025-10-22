@@ -1,8 +1,9 @@
 "use client";
 
-import { cn } from "@/lib/utils/cn";
-import { motion, MotionProps } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { motion, MotionProps } from "motion/react";
+
+import { cn } from "@/lib/utils/cn";
 
 interface AnimatedSpanProps extends MotionProps {
   children: React.ReactNode;
