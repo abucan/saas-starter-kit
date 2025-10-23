@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: 'Manage your billing information and subscriptions',
 };
 
+export const revalidate = 60;
+
 export default async function BillingPage() {
   const { subscription } = await getDashboardContext();
 
