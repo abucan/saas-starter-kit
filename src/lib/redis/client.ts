@@ -9,7 +9,7 @@ const redis = new Redis({
     const delay = Math.min(times * 50, 2000);
     return delay;
   },
-  enableOfflineQueue: false,
+  enableOfflineQueue: true,
   maxRetriesPerRequest: null,
 });
 

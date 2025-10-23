@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { handleError } from '@/lib/errors';
+import { invalidateDashboardCache } from '@/lib/redis/cache-invalidation';
 import { R } from '@/types/result';
 
 import { invitationsService } from '../services/invitations.service';
@@ -12,6 +13,9 @@ export async function inviteMemberAction(
 ): Promise<R<{ email: string }>> {
   try {
     const result = await invitationsService.inviteMember(input);
+
+    await invalidateDashboardCache();
+
     revalidatePath('/workspace', 'layout');
     return { ok: true, data: result };
   } catch (error) {
