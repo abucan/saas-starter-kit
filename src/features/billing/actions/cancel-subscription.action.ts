@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 
 import { requireUserId } from '@/lib/auth/session';
 import { handleError } from '@/lib/errors/error-handler';
+import { invalidateDashboardCache } from '@/lib/redis/cache-invalidation';
 import type { R } from '@/types/result';
 
 import { billingService } from '../services/billing.service';
@@ -14,6 +15,8 @@ export async function cancelSubscriptionAction(): Promise<R<never>> {
     await requireUserId();
 
     const portalUrl = await billingService.cancelSubscription();
+
+    await invalidateDashboardCache();
 
     redirect(portalUrl as any);
   } catch (error) {

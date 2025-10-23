@@ -9,6 +9,7 @@ const PUBLIC_ROUTE_PREFIXES = [
   '/accept-invitation',
   '/api/uploadthing',
   '/api/auth/get-session',
+  '/api/redis',
 ];
 const STATIC_ASSETS = ['/_next', '/favicon.ico', '/images', '/fonts'];
 
