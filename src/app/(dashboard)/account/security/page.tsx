@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: 'Manage security settings and delete your account',
 };
 
+export const revalidate = 60;
+
 export default function SecurityPage() {
   return (
     <div className='flex-1'>
