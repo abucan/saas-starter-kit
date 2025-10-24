@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   experimental: {
     authInterrupts: true,
+    staleTimes: {
+      dynamic: 300,
+    },
   },
   logging: {
     fetches: {

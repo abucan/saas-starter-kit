@@ -1,6 +1,5 @@
 import 'server-only';
 
-import { cache } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -15,7 +14,7 @@ import { InvitationRow } from '@/types/auth';
 const DASHBOARD_CACHE_TTL = 300;
 const CACHE_KEY_PREFIX = 'dashboard';
 
-export const getDashboardContext = cache(async () => {
+export async function getDashboardContext() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -95,4 +94,4 @@ export const getDashboardContext = cache(async () => {
   }
 
   return result;
-});
+}
