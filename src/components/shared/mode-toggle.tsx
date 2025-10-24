@@ -1,40 +1,78 @@
 'use client';
 
-import * as React from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Monitor, Moon, Sun } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useTheme } from 'next-themes';
 
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils/cn';
+
+const themes = [
+  {
+    key: 'system',
+    icon: Monitor,
+    label: 'System theme',
+  },
+  {
+    key: 'light',
+    icon: Sun,
+    label: 'Light theme',
+  },
+  {
+    key: 'dark',
+    icon: Moon,
+    label: 'Dark theme',
+  },
+];
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  const handleThemeClick = useCallback(
+    (themeKey: 'light' | 'dark' | 'system') => {
+      setTheme(themeKey);
+    },
+    [setTheme]
+  );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='icon-sm'>
-          <Sun className='h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90' />
-          <Moon className='absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
-          <span className='sr-only'>Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => setTheme('light')}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className='relative isolate flex h-8 rounded-full bg-background p-1 ring-1 ring-border'>
+      {themes.map(({ key, icon: Icon, label }) => {
+        const isActive = theme === key;
+
+        return (
+          <button
+            aria-label={label}
+            className='relative h-6 w-6 rounded-full'
+            key={key}
+            onClick={() => handleThemeClick(key as 'light' | 'dark' | 'system')}
+            type='button'
+          >
+            {isActive && (
+              <motion.div
+                className='absolute inset-0 rounded-full bg-secondary'
+                layoutId='activeTheme'
+                transition={{ type: 'spring', duration: 0.5 }}
+              />
+            )}
+            <Icon
+              className={cn(
+                'relative z-10 m-auto h-4 w-4',
+                isActive ? 'text-foreground' : 'text-muted-foreground'
+              )}
+            />
+          </button>
+        );
+      })}
+    </div>
   );
 }

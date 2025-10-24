@@ -1,6 +1,7 @@
 import { Bricolage_Grotesque, Spectral } from 'next/font/google';
 import type { Metadata } from 'next';
 
+import ProgressBarProvider from '@/components/shared/progress-bar-provider';
 import { ThemeProvider } from '@/components/shared/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -87,8 +88,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main>{children}</main>
-          <Toaster position='top-center' />
+          <ProgressBarProvider>
+            <main>{children}</main>
+            <Toaster position='top-center' />
+          </ProgressBarProvider>
         </ThemeProvider>
       </body>
     </html>
