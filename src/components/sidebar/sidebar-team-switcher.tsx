@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 import { useState, useTransition } from 'react';
-import Image from 'next/image';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,15 +60,13 @@ export function SidebarTeamSwitcher({
                 size='lg'
                 className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer'
               >
-                <div className='text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
-                  <Image
-                    src={activeTeam?.logo ?? '/avatars/apple.png'}
+                <Avatar className='size-8 rounded-lg'>
+                  <AvatarImage
+                    src={activeTeam?.logo ?? '/avatars/shadcn.jfif'}
                     alt={activeTeam?.name ?? 'team logo'}
-                    width={32}
-                    height={32}
-                    className='rounded-lg w-full h-full'
                   />
-                </div>
+                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+                </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>
                     {activeTeam?.name}
@@ -108,15 +106,14 @@ export function SidebarTeamSwitcher({
                     });
                   }}
                 >
-                  <div className='flex size-6 items-center justify-center rounded-md border'>
-                    <Image
-                      src={team.logo ?? '/avatars/apple.png'}
+                  <Avatar className='size-8 rounded-lg'>
+                    <AvatarImage
+                      src={team.logo ?? '/avatars/shadcn.jfif'}
                       alt={team.name ?? 'team logo'}
-                      width={32}
-                      height={32}
-                      className='rounded-md w-full h-full'
                     />
-                  </div>
+                    <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+                  </Avatar>
+
                   {team.name}
                 </DropdownMenuItem>
               ))}

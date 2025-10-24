@@ -20,7 +20,10 @@ export function CurrentPlanCard({
   return (
     <Card className='py-4 bg-muted max-w-2xl w-full'>
       <CardHeader className='flex flex-row items-center gap-4'>
-        <CreditCard className='p-2 bg-white rounded-lg' size={40} />
+        <CreditCard
+          className='bg-white dark:bg-primary dark:text-primary-foreground p-2 rounded-lg'
+          size={40}
+        />
         <div>
           <CardTitle className='text-sm font-bold'>
             Current Plan: {currentPlan}

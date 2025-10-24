@@ -17,7 +17,7 @@ export function WorkspaceNav() {
             href={nav.href as any}
             key={nav.title}
             className={`${
-              pathname === nav.href ? 'bg-primary/10' : 'hover:bg-muted'
+              pathname === nav.href ? 'bg-primary/20' : 'hover:bg-muted'
             } py-2.5 pl-2 pr-10 rounded-xl transition-colors`}
           >
             <div className='flex flex-row items-center gap-2'>

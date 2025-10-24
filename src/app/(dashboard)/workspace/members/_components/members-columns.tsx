@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import { ColumnDef } from '@tanstack/react-table';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MemberRow } from '@/types/auth';
 
 import { MemberActionsCell } from './members-actions-cell';
@@ -12,13 +12,13 @@ export const membersColumns: ColumnDef<MemberRow>[] = [
     header: () => <p className='text-sm'>Member</p>,
     cell: ({ row }) => (
       <div className='flex items-center gap-3'>
-        <Image
-          src={row.original.user.image || '/avatars/apple.png'}
-          alt={row.original.user.name}
-          width={40}
-          height={40}
-          className='rounded-full'
-        />
+        <Avatar className='size-10'>
+          <AvatarImage
+            src={row.original.user.image ?? '/avatars/shadcn.jfif'}
+            alt={row.original.user.name ?? 'user logo'}
+          />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
         <div className='flex flex-col'>
           <p className='text-sm font-medium'>
             {row.original.user.name}
