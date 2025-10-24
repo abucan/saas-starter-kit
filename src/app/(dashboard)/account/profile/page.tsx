@@ -9,8 +9,6 @@ export const metadata: Metadata = {
   description: 'Manage your account settings and preferences.',
 };
 
-export const revalidate = 60;
-
 export default async function ProfilePage() {
   const { user } = await getDashboardContext();
 

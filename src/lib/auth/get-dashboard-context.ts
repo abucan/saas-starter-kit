@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { cache } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -11,10 +12,10 @@ import { redis } from '@/lib/redis/client';
 import { FullOrganization, Role } from '@/types';
 import { InvitationRow } from '@/types/auth';
 
-const DASHBOARD_CACHE_TTL = 300; // 5 minutes
+const DASHBOARD_CACHE_TTL = 300;
 const CACHE_KEY_PREFIX = 'dashboard';
 
-export async function getDashboardContext() {
+export const getDashboardContext = cache(async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -94,4 +95,4 @@ export async function getDashboardContext() {
   }
 
   return result;
-}
+});
