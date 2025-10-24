@@ -8,7 +8,7 @@ export default function AccountLayout({
   return (
     <div className='flex flex-col gap-8'>
       <h1 className='text-2xl font-bold'>Account</h1>
-      <div className='flex flex-row gap-8'>
+      <div className='flex flex-col lg:flex-row gap-8'>
         <AccountNav />
         <div className='flex flex-1'>{children}</div>
       </div>

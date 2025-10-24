@@ -13,7 +13,7 @@ export default async function InvitationsPage() {
   const { invitations, membership } = await getDashboardContext();
 
   return (
-    <div className='flex-1'>
+    <div className='flex-1 overflow-x-auto'>
       <InvitationsTable
         invitations={invitations}
         currentUserRole={membership.role}

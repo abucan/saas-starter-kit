@@ -41,7 +41,7 @@ export function InvitationsTable({ invitations }: InvitationsTableProps) {
 
   return (
     <div className='flex flex-col gap-4 min-w-3/4'>
-      <Card className='overflow-hidden rounded-lg border p-0 w-full'>
+      <Card className='rounded-lg border p-0 w-full'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -13,7 +13,7 @@ export default async function MembersPage() {
   const { members, user, org, membership } = await getDashboardContext();
 
   return (
-    <div className='flex-1'>
+    <div className='flex-1 overflow-x-auto'>
       <MembersTable
         members={members ?? []}
         currentUserId={user.id}

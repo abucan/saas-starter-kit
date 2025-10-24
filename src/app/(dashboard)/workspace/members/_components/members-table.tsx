@@ -118,7 +118,7 @@ export function MembersTable({
         </Tooltip>
       </TooltipProvider>
 
-      <Card className='overflow-hidden rounded-lg border p-0 w-full'>
+      <Card className='rounded-lg border p-0 w-full'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

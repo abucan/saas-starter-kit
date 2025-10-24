@@ -15,7 +15,7 @@ export default async function BillingPage() {
   const { subscription } = await getDashboardContext();
 
   return (
-    <div className='flex flex-col gap-6 w-full'>
+    <div className='flex flex-col gap-6 w-full mb-6'>
       <CurrentPlanCard subscription={subscription} />
       <PricingTables
         currentPlan={subscription.plan}
