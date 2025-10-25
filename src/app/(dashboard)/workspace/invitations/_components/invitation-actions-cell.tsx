@@ -5,6 +5,7 @@ import { Loader2, Mail, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import { cancelInvitationAction } from '@/features/workspace/invitations/actions/cancel-invitation.action';
 import { resendInvitationAction } from '@/features/workspace/invitations/actions/resend-invitation.action';
 import type { InvitationRow } from '@/types/auth';
@@ -61,34 +62,34 @@ export function InvitationActionsCell({
 
   return (
     <div className='flex items-center gap-2'>
-      <Button
-        variant='outline'
-        size='sm'
-        onClick={handleResend}
-        disabled={isResending || !invitation._acl.canResend}
-      >
-        {isResending ? (
-          <Loader2 className='size-4 animate-spin' />
-        ) : (
-          <Mail className='size-4' />
-        )}
-        <span>Resend</span>
-      </Button>
-
-      <Button
-        variant='outline'
-        size='sm'
-        onClick={handleCancel}
-        disabled={isCanceling || !invitation._acl.canCancel}
-        className='border-destructive/10 hover:bg-destructive/20'
-      >
-        {isCanceling ? (
-          <Loader2 className='size-4 animate-spin text-destructive' />
-        ) : (
-          <X className='size-4 text-destructive' />
-        )}
-        <span className='text-destructive'>Cancel</span>
-      </Button>
+      <ButtonGroup>
+        <Button
+          variant='outline'
+          size='sm'
+          onClick={handleResend}
+          disabled={isResending || !invitation._acl.canResend}
+        >
+          {isResending ? (
+            <Loader2 className='size-4 animate-spin' />
+          ) : (
+            <Mail className='size-4' />
+          )}
+          <span>Resend</span>
+        </Button>
+        <Button
+          variant='outline'
+          size='sm'
+          onClick={handleCancel}
+          disabled={isCanceling || !invitation._acl.canCancel}
+        >
+          {isCanceling ? (
+            <Loader2 className='size-4 animate-spin' />
+          ) : (
+            <X className='size-4' />
+          )}
+          <span>Cancel</span>
+        </Button>
+      </ButtonGroup>
     </div>
   );
 }

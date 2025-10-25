@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useState, useTransition } from 'react';
+import { BProgress } from '@bprogress/core';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -95,13 +96,18 @@ export function SidebarTeamSwitcher({
                   className='gap-2 p-2'
                   onClick={() => {
                     startTransition(async () => {
-                      const res = await switchWorkspaceAction({
-                        workspaceId: team.id,
-                      });
-                      if (!res.ok) {
-                        toast.error(
-                          res.message || 'Failed to switch workspace'
-                        );
+                      BProgress.start();
+                      try {
+                        const res = await switchWorkspaceAction({
+                          workspaceId: team.id,
+                        });
+                        if (!res.ok) {
+                          toast.error(
+                            res.message || 'Failed to switch workspace'
+                          );
+                        }
+                      } finally {
+                        BProgress.done(true);
                       }
                     });
                   }}
