@@ -73,8 +73,8 @@ export function CreateWorkspaceDialog({
         toast.success('Workspace created successfully');
         form.reset();
         onOpenChange(false);
-        router.push('/workspace/settings');
-        router.refresh();
+        // router.push('/workspace/settings');
+        // router.refresh();
       } else {
         const errorMessage = getErrorMessage(result.code, result.message);
         toast.error(errorMessage);
